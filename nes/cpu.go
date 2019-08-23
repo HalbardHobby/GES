@@ -10,30 +10,30 @@ const (
 
 // Addressing modes
 const (
-	_ = iota
-	mode01
-	mode02
-	mode03
-	mode04
-	mode05
-	mode06
-	mode07
-	mode08
-	mode09
-	mode10
-	mode11
-	mode12
-	mode13
+	_              = iota
+	zeroPageIndexX // PEEK((arg + X) % 256)
+	zeroPageIndexY // PEEK((arg + Y) % 256)
+	absoluteIndexX // PEEK(arg + X)
+	absoluteIndexY // PEEK(arg + Y)
+	indirectindexX // PEEK(PEEK((arg + X) % 256) + PEEK((arg + X + 1) % 256) * 256)
+	indirectIndexY // PEEK(arg + X) % 256
+	implicit       // PEEK(PEEK(arg) + PEEK((arg + 1) % 256) * 256 + Y)
+	acumulator     // Instructions with implied destination
+	immediate      // Instructions that operate on the Accumulator
+	zeroPage       // fetches 8-bit value on zero page
+	absolute       // fetches value from 16-bit address anywhere in memory
+	relative       // Branch inbstructions
+	indirect
 )
 
 // CPU struct
 type CPU struct {
-	pCounter uint16          // Program counter
-	sPointer byte            // Stack Pointer
-	acc      byte            // Accumulator
-	regX     byte            // Index Register X
-	regY     byte            // Index Register Y
-	status   processorStatus // Proccessor status
+	programCounter uint16          // Program counter
+	stackPointer   byte            // Stack Pointer
+	accumulator    byte            // Accumulator
+	indexX         byte            // Index Register X
+	indexY         byte            // Index Register Y
+	statusRegister processorStatus // Proccessor status
 }
 
 type processorStatus struct {
