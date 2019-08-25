@@ -1,5 +1,8 @@
 package mos6502
 
+// Addressing modes
+type addressMode uint8
+
 const (
 	unknownIndex   addressMode = iota
 	zeroPageIndexX             // PEEK((arg + X) % 256)
