@@ -1,18 +1,18 @@
 package nes
 
 const (
-	internalRAMSize       = 0x800
+	internalRAMSize       = 0x0800
 	internalRAMMirrorSize = 0x1800
-	ppuRegisterSize       = 0x8
+	ppuRegisterSize       = 0x0008
 	ppuRegisterMirrorSize = 0x1FF8
-	apuIORegisterSize     = 0x18
-	apuIOTestSize         = 0x8
+	apuIORegisterSize     = 0x0018
+	apuIOTestSize         = 0x0008
 	cartridgeSpaceSize    = 0xBFE0
 )
 
 const (
-	internalMemoryStart    = 0x0
-	mirrorMemoryStart      = 0x800
+	internalMemoryStart    = 0x0000
+	mirrorMemoryStart      = 0x0800
 	ppuRegisterStart       = 0x2000
 	mirrorPPURegisterStart = 0x2008
 	apuIORegisterStart     = 0x4000
