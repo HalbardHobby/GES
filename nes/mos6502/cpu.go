@@ -1,4 +1,4 @@
-package nes
+package mos6502
 
 // Interrupt types
 type Interrupt uint8
@@ -8,26 +8,6 @@ const (
 	interruptNone              // No interruption
 	interruptNMI               // Non maskable interrupts
 	interruptIRQ               // maskable interrupts
-)
-
-// Addressing modes
-type AddressMode uint8
-
-const (
-	unknownIndex   AddressMode = iota
-	zeroPageIndexX             // PEEK((arg + X) % 256)
-	zeroPageIndexY             // PEEK((arg + Y) % 256)
-	absoluteIndexX             // PEEK(arg + X)
-	absoluteIndexY             // PEEK(arg + Y)
-	indirectindexX             // PEEK(PEEK((arg + X) % 256) + PEEK((arg + X + 1) % 256)*256)
-	indirectIndexY             // PEEK(arg + X) % 256
-	implicit                   // PEEK(PEEK(arg) + PEEK((arg + 1) % 256) * 256 + Y)
-	acumulator                 // Instructions with implied destination
-	immediate                  // Instructions that operate on the Accumulator
-	zeroPage                   // fetches 8-bit value on zero page
-	absolute                   // fetches value from 16-bit address anywhere in memory
-	relative                   // Branch instructions
-	indirect
 )
 
 // FlagMask are the flags for processor status
@@ -54,13 +34,6 @@ type CPU struct {
 	processorStatus flagSet // Proccessor status
 }
 
-type instruction struct {
-	mode   AddressMode // Addressing mode for the function
-	size   byte        // Instruction size
-	cycles byte        // Number of cycles used by the instruction
-	name   [3]byte     // instruction name
-}
-
 func (f *flagSet) set(bits flagSet) {
 	*f = *f | bits
 }
@@ -72,4 +45,23 @@ func (f *flagSet) toggle(bits flagSet) {
 }
 func (f flagSet) has(bits flagSet) bool {
 	return f&bits != 0
+}
+
+func (cpu *CPU) clock() {
+
+}
+
+// Forces the CPU to a known state.
+func (cpu *CPU) reset() {
+
+}
+
+func (cpu *CPU) interruptIRQ() {
+	if !cpu.processorStatus.has(interruptDisable) {
+
+	}
+}
+
+func (cpu *CPU) interruptNMI() {
+
 }
