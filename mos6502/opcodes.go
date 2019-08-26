@@ -2,7 +2,7 @@ package mos6502
 
 // OPCODES IMPLEMENTATION //
 
-func (cpu *CPU) adc() {
+func (cpu *CPU) adc(func(*CPU) uint8) {
 
 }
 
@@ -55,19 +55,19 @@ func (cpu *CPU) bvs() {
 }
 
 func (cpu *CPU) clc() {
-
+	cpu.processorStatus.clear(carry)
 }
 
 func (cpu *CPU) cld() {
-
+	cpu.processorStatus.clear(decimal)
 }
 
 func (cpu *CPU) cli() {
-
+	cpu.processorStatus.clear(interruptDisable)
 }
 
 func (cpu *CPU) clv() {
-
+	cpu.processorStatus.clear(overflow)
 }
 
 func (cpu *CPU) cmp() {
@@ -135,7 +135,7 @@ func (cpu *CPU) lsr() {
 }
 
 func (cpu *CPU) nop() {
-
+	return
 }
 
 func (cpu *CPU) ora() {
@@ -203,7 +203,8 @@ func (cpu *CPU) sty() {
 }
 
 func (cpu *CPU) tax() {
-
+	cpu.indexX = cpu.accumulator
+	// TODO set flags
 }
 
 func (cpu *CPU) tay() {
