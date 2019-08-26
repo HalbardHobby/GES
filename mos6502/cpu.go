@@ -24,8 +24,8 @@ const (
 	negative                             // Set if number is negative
 )
 
-// cpu struct
-type cpu struct {
+// CPU struct
+type CPU struct {
 	programCounter  uint16  // Program counter
 	stackPointer    byte    // Stack Pointer
 	accumulator     byte    // Accumulator
@@ -36,6 +36,16 @@ type cpu struct {
 
 	ReadBus  func(uint16) uint8  // 16-bit bus read chanel
 	WriteBus func(uint16, uint8) // 16-bit write bus connection
+}
+
+var processor *CPU
+
+// GetCPU returns the global processor instance. Should be preferred over
+func GetCPU() *CPU {
+	if processor == nil {
+		processor = new(CPU)
+	}
+	return processor
 }
 
 func (f *flagSet) set(bits flagSet) {
@@ -51,23 +61,23 @@ func (f flagSet) has(bits flagSet) bool {
 	return f&bits != 0
 }
 
-func (c *cpu) clock() {
+func (c *CPU) clock() {
 	c.opcode = c.ReadBus(c.programCounter)
 	c.programCounter++
 
 }
 
 // Forces the CPU to a known state.
-func (c *cpu) reset() {
+func (c *CPU) reset() {
 
 }
 
-func (c *cpu) interruptIRQ() {
+func (c *CPU) interruptIRQ() {
 	if !c.processorStatus.has(interruptDisable) {
 
 	}
 }
 
-func (c *cpu) interruptNMI() {
+func (c *CPU) interruptNMI() {
 
 }

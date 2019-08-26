@@ -8,7 +8,7 @@ func TestCPU_adc(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -26,7 +26,7 @@ func TestCPU_and(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -44,7 +44,7 @@ func TestCPU_asl(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -62,7 +62,7 @@ func TestCPU_bcc(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -80,7 +80,7 @@ func TestCPU_bcs(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -98,7 +98,7 @@ func TestCPU_beq(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -116,7 +116,7 @@ func TestCPU_bit(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -134,7 +134,7 @@ func TestCPU_bmi(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -152,7 +152,7 @@ func TestCPU_bne(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -170,7 +170,7 @@ func TestCPU_bpl(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -188,7 +188,7 @@ func TestCPU_brk(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -206,7 +206,7 @@ func TestCPU_bvc(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -224,7 +224,7 @@ func TestCPU_bvs(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -242,7 +242,7 @@ func TestCPU_clc(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -260,7 +260,7 @@ func TestCPU_cld(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -278,7 +278,7 @@ func TestCPU_cli(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -296,7 +296,7 @@ func TestCPU_clv(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -314,7 +314,7 @@ func TestCPU_cmp(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -332,7 +332,7 @@ func TestCPU_cpx(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -350,7 +350,7 @@ func TestCPU_cpy(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -368,7 +368,7 @@ func TestCPU_dec(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -386,7 +386,7 @@ func TestCPU_dex(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -404,7 +404,7 @@ func TestCPU_dey(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -422,7 +422,7 @@ func TestCPU_eor(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -440,7 +440,7 @@ func TestCPU_inc(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -458,7 +458,7 @@ func TestCPU_inx(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -476,7 +476,7 @@ func TestCPU_iny(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -494,7 +494,7 @@ func TestCPU_jmp(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -512,7 +512,7 @@ func TestCPU_jsr(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -530,7 +530,7 @@ func TestCPU_lda(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -548,7 +548,7 @@ func TestCPU_ldx(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -566,7 +566,7 @@ func TestCPU_ldy(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -584,7 +584,7 @@ func TestCPU_lsr(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -602,7 +602,7 @@ func TestCPU_nop(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -620,7 +620,7 @@ func TestCPU_ora(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -638,7 +638,7 @@ func TestCPU_pha(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -656,7 +656,7 @@ func TestCPU_php(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -674,7 +674,7 @@ func TestCPU_pla(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -692,7 +692,7 @@ func TestCPU_plp(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -710,7 +710,7 @@ func TestCPU_rol(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -728,7 +728,7 @@ func TestCPU_ror(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -746,7 +746,7 @@ func TestCPU_rti(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -764,7 +764,7 @@ func TestCPU_rts(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -782,7 +782,7 @@ func TestCPU_sbc(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -800,7 +800,7 @@ func TestCPU_sec(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -818,7 +818,7 @@ func TestCPU_sed(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -836,7 +836,7 @@ func TestCPU_sei(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -854,7 +854,7 @@ func TestCPU_sta(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -872,7 +872,7 @@ func TestCPU_stx(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -890,7 +890,7 @@ func TestCPU_sty(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -908,7 +908,7 @@ func TestCPU_tax(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -926,7 +926,7 @@ func TestCPU_tay(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -944,7 +944,7 @@ func TestCPU_tsx(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -962,7 +962,7 @@ func TestCPU_txa(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -980,7 +980,7 @@ func TestCPU_txs(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.
@@ -998,7 +998,7 @@ func TestCPU_tya(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		cpu  *cpu
+		cpu  *CPU
 		args args
 	}{
 		// TODO: Add test cases.

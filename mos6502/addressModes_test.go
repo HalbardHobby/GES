@@ -20,10 +20,10 @@ func getTestMemory() (mem memory, read readBus, write writeBus) {
 func TestCPU_a(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
-		{"base", &cpu{}, 0},
+		{"base", &CPU{}, 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -38,10 +38,10 @@ func TestCPU_abs(t *testing.T) {
 	//memory, read, write := getTestMemory()
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
-		{"base", &cpu{}, 0},
+		{"base", &CPU{}, 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -55,7 +55,7 @@ func TestCPU_abs(t *testing.T) {
 func TestCPU_absX(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -72,7 +72,7 @@ func TestCPU_absX(t *testing.T) {
 func TestCPU_absY(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -89,7 +89,7 @@ func TestCPU_absY(t *testing.T) {
 func TestCPU_imm(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -106,7 +106,7 @@ func TestCPU_imm(t *testing.T) {
 func TestCPU_impl(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -123,7 +123,7 @@ func TestCPU_impl(t *testing.T) {
 func TestCPU_ind(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -140,7 +140,7 @@ func TestCPU_ind(t *testing.T) {
 func TestCPU_xInd(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -157,7 +157,7 @@ func TestCPU_xInd(t *testing.T) {
 func TestCPU_indY(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -174,7 +174,7 @@ func TestCPU_indY(t *testing.T) {
 func TestCPU_rel(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -191,7 +191,7 @@ func TestCPU_rel(t *testing.T) {
 func TestCPU_zpg(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -208,7 +208,7 @@ func TestCPU_zpg(t *testing.T) {
 func TestCPU_zpgX(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
@@ -225,7 +225,7 @@ func TestCPU_zpgX(t *testing.T) {
 func TestCPU_zpgY(t *testing.T) {
 	tests := []struct {
 		name      string
-		cpu       *cpu
+		cpu       *CPU
 		wantValue uint8
 	}{
 		// TODO: Add test cases.
