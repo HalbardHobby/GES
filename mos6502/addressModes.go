@@ -1,24 +1,7 @@
 package mos6502
 
 // Addressing modes
-type addressMode uint8
-
-const (
-	unknownIndex   addressMode = iota
-	zeroPageIndexX             // PEEK((arg + X) % 256)
-	zeroPageIndexY             // PEEK((arg + Y) % 256)
-	absoluteIndexX             // PEEK(arg + X)
-	absoluteIndexY             // PEEK(arg + Y)
-	indirectindexX             // PEEK(PEEK((arg + X) % 256) + PEEK((arg + X + 1) % 256)*256)
-	indirectIndexY             // PEEK(arg + X) % 256
-	implicit                   // PEEK(PEEK(arg) + PEEK((arg + 1) % 256) * 256 + Y)
-	acumulator                 // Instructions with implied destination
-	immediate                  // Instructions that operate on the Accumulator
-	zeroPage                   // fetches 8-bit value on zero page
-	absolute                   // fetches value from 16-bit address anywhere in memory
-	relative                   // Branch instructions
-	indirect
-)
+type addressMode func(*CPU) uint8
 
 // ADDRESSING MODES IMPLEMENTATION //
 // All addressing modes return the expected value
