@@ -1,67 +1,67 @@
 package mos6502
 
 // Addressing modes
-type addressMode func(*CPU) uint8
+type addressMode func(*cpu) uint8
 
 // ADDRESSING MODES IMPLEMENTATION //
 // All addressing modes return the expected value
 
-func (cpu *CPU) a() (value uint8) {
+func (c *cpu) a() (value uint8) {
 	return
 }
 
-func (cpu *CPU) abs() (value uint8) {
-	lo := uint16(cpu.ReadBus(cpu.programCounter))
-	cpu.programCounter++
-	hi := uint16(cpu.ReadBus(cpu.programCounter))
-	cpu.programCounter++
+func (c *cpu) abs() (value uint8) {
+	lo := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
+	hi := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
 
-	value = cpu.ReadBus((hi << 8) | lo)
+	value = c.ReadBus((hi << 8) | lo)
 	return
 }
 
-func (cpu *CPU) absX() (value uint8) {
+func (c *cpu) absX() (value uint8) {
 	return
 }
 
-func (cpu *CPU) absY() (value uint8) {
+func (c *cpu) absY() (value uint8) {
 	return
 }
 
-func (cpu *CPU) imm() (value uint8) {
-	value = cpu.ReadBus(cpu.programCounter)
-	cpu.programCounter++
+func (c *cpu) imm() (value uint8) {
+	value = c.ReadBus(c.programCounter)
+	c.programCounter++
 	return
 }
 
-func (cpu *CPU) impl() (value uint8) {
+func (c *cpu) impl() (value uint8) {
 	return
 }
 
-func (cpu *CPU) ind() (value uint8) {
+func (c *cpu) ind() (value uint8) {
 	return
 }
 
-func (cpu *CPU) xInd() (value uint8) {
+func (c *cpu) xInd() (value uint8) {
 	return
 }
 
-func (cpu *CPU) indY() (value uint8) {
+func (c *cpu) indY() (value uint8) {
 	return
 }
 
-func (cpu *CPU) rel() (value uint8) {
+func (c *cpu) rel() (value uint8) {
 	return
 }
 
-func (cpu *CPU) zpg() (value uint8) {
+func (c *cpu) zpg() (value uint8) {
 	return
 }
 
-func (cpu *CPU) zpgX() (value uint8) {
+func (c *cpu) zpgX() (value uint8) {
 	return
 }
 
-func (cpu *CPU) zpgY() (value uint8) {
+func (c *cpu) zpgY() (value uint8) {
 	return
 }

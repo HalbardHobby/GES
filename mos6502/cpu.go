@@ -24,8 +24,8 @@ const (
 	negative                             // Set if number is negative
 )
 
-// CPU struct
-type CPU struct {
+// cpu struct
+type cpu struct {
 	programCounter  uint16  // Program counter
 	stackPointer    byte    // Stack Pointer
 	accumulator     byte    // Accumulator
@@ -51,23 +51,23 @@ func (f flagSet) has(bits flagSet) bool {
 	return f&bits != 0
 }
 
-func (cpu *CPU) clock() {
-	cpu.opcode = cpu.ReadBus(cpu.programCounter)
-	cpu.programCounter++
+func (c *cpu) clock() {
+	c.opcode = c.ReadBus(c.programCounter)
+	c.programCounter++
 
 }
 
 // Forces the CPU to a known state.
-func (cpu *CPU) reset() {
+func (c *cpu) reset() {
 
 }
 
-func (cpu *CPU) interruptIRQ() {
-	if !cpu.processorStatus.has(interruptDisable) {
+func (c *cpu) interruptIRQ() {
+	if !c.processorStatus.has(interruptDisable) {
 
 	}
 }
 
-func (cpu *CPU) interruptNMI() {
+func (c *cpu) interruptNMI() {
 
 }
