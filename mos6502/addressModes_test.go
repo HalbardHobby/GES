@@ -6,6 +6,16 @@ type memory []byte
 type readBus func(uint16) uint8
 type writeBus func(uint16, uint8)
 
+// Struct type used to model test cases
+type addressTest struct {
+	name      string
+	cpu       *CPU
+	address   uint16
+	wantValue uint8
+}
+
+// This function creates a sample memory array with its read
+// and write buses for testing purposes.
 func getTestMemory() (mem memory, read readBus, write writeBus) {
 	mem = make([]byte, 0xFFFF)
 	read = func(adr uint16) uint8 {
@@ -18,12 +28,8 @@ func getTestMemory() (mem memory, read readBus, write writeBus) {
 }
 
 func TestCPU_a(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
-		{"base", &CPU{}, 0},
+	tests := []addressTest{
+		{"base", &CPU{}, 0, 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -43,21 +49,17 @@ func TestCPU_abs(t *testing.T) {
 	c.programCounter = 0x0050
 	memory[0x0050] = 0xDE
 	memory[0x0051] = 0x0F
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-		wantPC    uint16
-	}{
-		{"base", c, memory[0x0FDE], c.programCounter + 2},
+	tests := []addressTest{
+		{"base", c, 0x0FDE, memory[0x0FDE]},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedPC := tt.cpu.programCounter + 2
 			if gotValue := tt.cpu.abs(); gotValue != tt.wantValue {
 
 				t.Errorf("CPU.abs() = %v, want %v", gotValue, tt.wantValue)
 			}
-			if tt.cpu.programCounter != tt.wantPC {
+			if tt.cpu.programCounter != expectedPC {
 				t.Errorf("Program counter in wrong location")
 			}
 		})
@@ -65,11 +67,7 @@ func TestCPU_abs(t *testing.T) {
 }
 
 func TestCPU_absX(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -82,11 +80,7 @@ func TestCPU_absX(t *testing.T) {
 }
 
 func TestCPU_absY(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -99,11 +93,7 @@ func TestCPU_absY(t *testing.T) {
 }
 
 func TestCPU_imm(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -116,11 +106,7 @@ func TestCPU_imm(t *testing.T) {
 }
 
 func TestCPU_impl(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -133,11 +119,7 @@ func TestCPU_impl(t *testing.T) {
 }
 
 func TestCPU_ind(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -150,11 +132,7 @@ func TestCPU_ind(t *testing.T) {
 }
 
 func TestCPU_xInd(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -167,11 +145,7 @@ func TestCPU_xInd(t *testing.T) {
 }
 
 func TestCPU_indY(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -184,11 +158,7 @@ func TestCPU_indY(t *testing.T) {
 }
 
 func TestCPU_rel(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -202,12 +172,7 @@ func TestCPU_rel(t *testing.T) {
 
 func TestCPU_zpg(t *testing.T) {
 	c := GetCPU()
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		address   uint16
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		{"general", c, 0x00CD, 0x0F},
 	}
 	for _, tt := range tests {
@@ -231,11 +196,7 @@ func TestCPU_zpg(t *testing.T) {
 }
 
 func TestCPU_zpgX(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
@@ -248,11 +209,7 @@ func TestCPU_zpgX(t *testing.T) {
 }
 
 func TestCPU_zpgY(t *testing.T) {
-	tests := []struct {
-		name      string
-		cpu       *CPU
-		wantValue uint8
-	}{
+	tests := []addressTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
