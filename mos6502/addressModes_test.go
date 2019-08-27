@@ -201,17 +201,30 @@ func TestCPU_rel(t *testing.T) {
 }
 
 func TestCPU_zpg(t *testing.T) {
+	c := GetCPU()
 	tests := []struct {
 		name      string
 		cpu       *CPU
+		address   uint16
 		wantValue uint8
 	}{
-		// TODO: Add test cases.
+		{"general", c, 0x00CD, 0x0F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			memory, read, write := getTestMemory()
+			tt.cpu.ReadBus = read
+			tt.cpu.WriteBus = write
+			expectedCounter := tt.cpu.programCounter + 1
+			memory[tt.cpu.programCounter] = uint8(tt.address)
+			memory[tt.address] = tt.wantValue
+
 			if gotValue := tt.cpu.zpg(); gotValue != tt.wantValue {
-				t.Errorf("CPU.zpg() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.zpg() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedCounter {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedCounter)
 			}
 		})
 	}

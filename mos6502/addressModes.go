@@ -55,7 +55,9 @@ func (c *CPU) rel() (value uint8) {
 }
 
 func (c *CPU) zpg() (value uint8) {
-	return
+	lo := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
+	return c.ReadBus(lo & 0x00FF)
 }
 
 func (c *CPU) zpgX() (value uint8) {
