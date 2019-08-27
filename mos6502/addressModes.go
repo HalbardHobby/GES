@@ -16,7 +16,7 @@ func (c *CPU) abs() (value uint8) {
 	hi := uint16(c.ReadBus(c.programCounter))
 	c.programCounter++
 
-	value = c.ReadBus((hi << 8) | lo)
+	value = c.ReadBus(lo | (hi << 8))
 	return
 }
 

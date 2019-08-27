@@ -35,18 +35,30 @@ func TestCPU_a(t *testing.T) {
 }
 
 func TestCPU_abs(t *testing.T) {
-	//memory, read, write := getTestMemory()
+	memory, read, write := getTestMemory()
+	var c = GetCPU()
+	c.ReadBus = read
+	c.WriteBus = write
+	memory[0x0FDE] = 0x15
+	c.programCounter = 0x0050
+	memory[0x0050] = 0xDE
+	memory[0x0051] = 0x0F
 	tests := []struct {
 		name      string
 		cpu       *CPU
 		wantValue uint8
+		wantPC    uint16
 	}{
-		{"base", &CPU{}, 0},
+		{"base", c, memory[0x0FDE], c.programCounter + 2},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if gotValue := tt.cpu.abs(); gotValue != tt.wantValue {
+
 				t.Errorf("CPU.abs() = %v, want %v", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != tt.wantPC {
+				t.Errorf("Program counter in wrong location")
 			}
 		})
 	}
