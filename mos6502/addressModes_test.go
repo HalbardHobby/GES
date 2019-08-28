@@ -8,10 +8,22 @@ type writeBus func(uint16, uint8)
 
 // Struct type used to model test cases
 type addressTest struct {
-	name      string
-	cpu       *CPU
-	address   uint16
-	wantValue uint8
+	name       string
+	cpu        *CPU
+	address    uint16
+	pcMovement uint16
+	wantValue  uint8
+}
+
+// Utility function that sets up the testcase
+func (tt *addressTest) setupAddressTest() (expectedCounter uint16) {
+	memory, read, write := getTestMemory()
+	tt.cpu.ReadBus = read
+	tt.cpu.WriteBus = write
+	expectedCounter = tt.cpu.programCounter + tt.pcMovement
+	memory[tt.cpu.programCounter] = uint8(tt.address)
+	memory[tt.address] = tt.wantValue
+	return
 }
 
 // This function creates a sample memory array with its read
@@ -29,38 +41,38 @@ func getTestMemory() (mem memory, read readBus, write writeBus) {
 
 func TestCPU_a(t *testing.T) {
 	tests := []addressTest{
-		{"base", &CPU{}, 0, 0},
+		{"base", &CPU{}, 0, 0, 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedCounter := tt.setupAddressTest()
 			if gotValue := tt.cpu.a(); gotValue != tt.wantValue {
 				t.Errorf("CPU.a() = %v, want %v", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedCounter {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedCounter)
 			}
 		})
 	}
 }
 
 func TestCPU_abs(t *testing.T) {
-	memory, read, write := getTestMemory()
-	var c = GetCPU()
-	c.ReadBus = read
-	c.WriteBus = write
-	memory[0x0FDE] = 0x15
-	c.programCounter = 0x0050
-	memory[0x0050] = 0xDE
-	memory[0x0051] = 0x0F
 	tests := []addressTest{
-		{"base", c, 0x0FDE, memory[0x0FDE]},
+		{"base", GetCPU(), 0x0FDE, 2, 0x15},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			expectedPC := tt.cpu.programCounter + 2
+			expectedPC := tt.setupAddressTest()
+			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
+			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
 			if gotValue := tt.cpu.abs(); gotValue != tt.wantValue {
 
 				t.Errorf("CPU.abs() = %v, want %v", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
-				t.Errorf("Program counter in wrong location")
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -173,7 +185,7 @@ func TestCPU_rel(t *testing.T) {
 func TestCPU_zpg(t *testing.T) {
 	c := GetCPU()
 	tests := []addressTest{
-		{"general", c, 0x00CD, 0x0F},
+		{"general", c, 0x00CD, 1, 0x0F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
