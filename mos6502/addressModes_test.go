@@ -17,19 +17,17 @@ type addressTest struct {
 
 // Utility function that sets up the testcase
 func (tt *addressTest) setupAddressTest() (expectedCounter uint16) {
-	memory, read, write := getTestMemory()
+	read, write := getTestMemory()
 	tt.cpu.ReadBus = read
 	tt.cpu.WriteBus = write
 	expectedCounter = tt.cpu.programCounter + tt.pcMovement
-	memory[tt.cpu.programCounter] = uint8(tt.address)
-	memory[tt.address] = tt.wantValue
 	return
 }
 
 // This function creates a sample memory array with its read
 // and write buses for testing purposes.
-func getTestMemory() (mem memory, read readBus, write writeBus) {
-	mem = make([]byte, 0xFFFF)
+func getTestMemory() (read readBus, write writeBus) {
+	mem := make([]byte, 0xFFFF)
 	read = func(adr uint16) uint8 {
 		return mem[adr]
 	}
@@ -41,7 +39,7 @@ func getTestMemory() (mem memory, read readBus, write writeBus) {
 
 func TestCPU_a(t *testing.T) {
 	tests := []addressTest{
-		{"base", &CPU{}, 0, 0, 0},
+		{name: "base", cpu: &CPU{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -59,11 +57,13 @@ func TestCPU_a(t *testing.T) {
 
 func TestCPU_abs(t *testing.T) {
 	tests := []addressTest{
-		{"base", GetCPU(), 0x0FDE, 2, 0x15},
+		{name: "base", cpu: GetCPU(),
+			address: 0x0FDE, pcMovement: 2, wantValue: 0x15},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedPC := tt.setupAddressTest()
+			tt.cpu.WriteBus(tt.address, tt.wantValue)
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
 			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
 			if gotValue := tt.cpu.abs(); gotValue != tt.wantValue {
@@ -183,18 +183,15 @@ func TestCPU_rel(t *testing.T) {
 }
 
 func TestCPU_zpg(t *testing.T) {
-	c := GetCPU()
 	tests := []addressTest{
-		{"general", c, 0x00CD, 1, 0x0F},
+		{name: "general", cpu: GetCPU(),
+			address: 0x00CD, pcMovement: 1, wantValue: 0x0F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			memory, read, write := getTestMemory()
-			tt.cpu.ReadBus = read
-			tt.cpu.WriteBus = write
-			expectedCounter := tt.cpu.programCounter + 1
-			memory[tt.cpu.programCounter] = uint8(tt.address)
-			memory[tt.address] = tt.wantValue
+			expectedCounter := tt.setupAddressTest()
+			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
+			tt.cpu.WriteBus(tt.address, tt.wantValue)
 
 			if gotValue := tt.cpu.zpg(); gotValue != tt.wantValue {
 				t.Errorf("CPU.zpg() = 0x%X, want 0x%X", gotValue, tt.wantValue)
@@ -209,12 +206,23 @@ func TestCPU_zpg(t *testing.T) {
 
 func TestCPU_zpgX(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{indexX: 0x02},
+			address: 0x005F, pcMovement: 1, wantValue: 0x8F},
+		{name: "page overflow", cpu: &CPU{indexX: 0xDD},
+			address: 0x00DD, pcMovement: 1, wantValue: 0x8F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedCounter := tt.setupAddressTest()
+			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
+			tt.cpu.WriteBus((tt.address+uint16(tt.cpu.indexX))&0x00FF,
+				tt.wantValue)
 			if gotValue := tt.cpu.zpgX(); gotValue != tt.wantValue {
-				t.Errorf("CPU.zpgX() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.zpgX() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedCounter {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedCounter)
 			}
 		})
 	}
@@ -222,12 +230,23 @@ func TestCPU_zpgX(t *testing.T) {
 
 func TestCPU_zpgY(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{indexY: 0x02},
+			address: 0x005F, pcMovement: 1, wantValue: 0x8F},
+		{name: "page overflow", cpu: &CPU{indexX: 0xDD},
+			address: 0x00DD, pcMovement: 1, wantValue: 0x8F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedCounter := tt.setupAddressTest()
+			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
+			tt.cpu.WriteBus((tt.address+uint16(tt.cpu.indexY))&0x00FF,
+				tt.wantValue)
 			if gotValue := tt.cpu.zpgY(); gotValue != tt.wantValue {
-				t.Errorf("CPU.zpgY() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.zpgY() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedCounter {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedCounter)
 			}
 		})
 	}

@@ -61,9 +61,13 @@ func (c *CPU) zpg() (value uint8) {
 }
 
 func (c *CPU) zpgX() (value uint8) {
-	return
+	lo := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
+	return c.ReadBus((lo + uint16(c.indexX)) & 0x00FF)
 }
 
 func (c *CPU) zpgY() (value uint8) {
-	return
+	lo := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
+	return c.ReadBus((lo + uint16(c.indexY)) & 0x00FF)
 }
