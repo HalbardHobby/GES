@@ -41,8 +41,8 @@ func (c *CPU) absY() (value uint8) {
 }
 
 func (c *CPU) imm() (value uint8) {
-	c.programCounter++
 	value = c.ReadBus(c.programCounter)
+	c.programCounter++
 	return
 }
 
@@ -52,7 +52,16 @@ func (c *CPU) impl() (value uint8) {
 }
 
 func (c *CPU) ind() (value uint8) {
-	return
+	lo := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
+	hi := uint16(c.ReadBus(c.programCounter))
+	c.programCounter++
+
+	tempAddr := lo | (hi << 8)
+	addrLo := uint16(c.ReadBus(tempAddr))
+	addrHi := uint16(c.ReadBus(tempAddr + 1))
+
+	return c.ReadBus(addrLo | (addrHi << 8))
 }
 
 func (c *CPU) xInd() (value uint8) {
@@ -63,7 +72,10 @@ func (c *CPU) indY() (value uint8) {
 	return
 }
 
+// relative is a special adressing mode used by branching functions
 func (c *CPU) rel() (value uint8) {
+	value = c.ReadBus(c.programCounter)
+	c.programCounter++
 	return
 }
 

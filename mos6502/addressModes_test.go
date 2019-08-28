@@ -148,7 +148,7 @@ func TestCPU_imm(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedPC := tt.setupAddressTest()
-			tt.cpu.WriteBus(expectedPC, tt.wantValue)
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.wantValue)
 			if gotValue := tt.cpu.imm(); gotValue != tt.wantValue {
 				t.Errorf("CPU.imm() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
@@ -167,8 +167,13 @@ func TestCPU_impl(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedPC := tt.setupAddressTest()
 			if gotValue := tt.cpu.impl(); gotValue != tt.wantValue {
 				t.Errorf("CPU.impl() = %v, want %v", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -176,12 +181,27 @@ func TestCPU_impl(t *testing.T) {
 
 func TestCPU_ind(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{},
+			address: 0x0FDE, pcMovement: 2, wantValue: 0x15},
 	}
 	for _, tt := range tests {
+		expectedPC := tt.setupAddressTest()
+		intadr := uint16(0x0AEF)
+		tt.cpu.WriteBus(intadr, uint8(tt.address&0xFF))
+		tt.cpu.WriteBus(intadr+1, uint8(tt.address>>8))
+
+		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(intadr&0xFF))
+		tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(intadr>>8))
+
+		tt.cpu.WriteBus(tt.address, tt.wantValue)
+
 		t.Run(tt.name, func(t *testing.T) {
 			if gotValue := tt.cpu.ind(); gotValue != tt.wantValue {
-				t.Errorf("CPU.ind() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.ind() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -189,12 +209,24 @@ func TestCPU_ind(t *testing.T) {
 
 func TestCPU_xInd(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "static", cpu: &CPU{},
+			address: 0x00DE, pcMovement: 1, wantValue: 0x15},
+		{name: "standard", cpu: &CPU{indexX: 0x05},
+			address: 0x00DE, pcMovement: 1, wantValue: 0x15},
+		{name: "overflow", cpu: &CPU{indexX: 0x30},
+			address: 0x00DE, pcMovement: 1, wantValue: 0x15},
 	}
 	for _, tt := range tests {
+		expectedPC := tt.setupAddressTest()
+		tt.cpu.WriteBus(tt.address+uint16(tt.cpu.indexX), tt.wantValue)
+		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address)&0xFF)
 		t.Run(tt.name, func(t *testing.T) {
 			if gotValue := tt.cpu.xInd(); gotValue != tt.wantValue {
 				t.Errorf("CPU.xInd() = %v, want %v", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -215,12 +247,26 @@ func TestCPU_indY(t *testing.T) {
 
 func TestCPU_rel(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "static",
+			cpu: &CPU{programCounter: 0x8000}, address: 0x0F00,
+			pcMovement: 1, wantValue: 0x0},
+		{name: "positive",
+			cpu: &CPU{programCounter: 0x8000}, address: 0x0F00,
+			pcMovement: 1, wantValue: 0x10},
+		{name: "negative",
+			cpu: &CPU{programCounter: 0x8000}, address: 0x0FDD,
+			pcMovement: 1, wantValue: 0x90},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedPC := tt.setupAddressTest()
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.wantValue)
 			if gotValue := tt.cpu.rel(); gotValue != tt.wantValue {
 				t.Errorf("CPU.rel() = %v, want %v", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
