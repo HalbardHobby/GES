@@ -37,15 +37,15 @@ func getTestMemory() (read readBus, write writeBus) {
 	return
 }
 
-func TestCPU_a(t *testing.T) {
+func TestCPU_acc(t *testing.T) {
 	tests := []addressTest{
-		{name: "base", cpu: &CPU{}},
+		{name: "base", cpu: &CPU{accumulator: 0x80}, wantValue: 0x80},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedCounter := tt.setupAddressTest()
-			if gotValue := tt.cpu.a(); gotValue != tt.wantValue {
-				t.Errorf("CPU.a() = %v, want %v", gotValue, tt.wantValue)
+			if gotValue := tt.cpu.acc(); gotValue != tt.wantValue {
+				t.Errorf("CPU.acc() = %v, want %v", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedCounter {
 				t.Errorf("counter is 0x%X, should be 0x%X",
@@ -57,7 +57,7 @@ func TestCPU_a(t *testing.T) {
 
 func TestCPU_abs(t *testing.T) {
 	tests := []addressTest{
-		{name: "base", cpu: GetCPU(),
+		{name: "base", cpu: &CPU{},
 			address: 0x0FDE, pcMovement: 2, wantValue: 0x15},
 	}
 	for _, tt := range tests {
@@ -80,12 +80,30 @@ func TestCPU_abs(t *testing.T) {
 
 func TestCPU_absX(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{indexX: 0}, address: 0x0F00,
+			pcMovement: 2, wantValue: 0x15},
+		{name: "advance",
+			cpu: &CPU{indexX: 0x25}, address: 0x0F00,
+			pcMovement: 2, wantValue: 0x15},
+		{name: "page overflow",
+			cpu: &CPU{indexX: 0x40}, address: 0x0FDD,
+			pcMovement: 2, wantValue: 0x15},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedPC := tt.setupAddressTest()
+			adr := tt.address + uint16(tt.cpu.indexX)
+			tt.cpu.WriteBus(adr, tt.wantValue)
+			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
+			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
+
 			if gotValue := tt.cpu.absX(); gotValue != tt.wantValue {
-				t.Errorf("CPU.absX() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.absX() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -93,12 +111,30 @@ func TestCPU_absX(t *testing.T) {
 
 func TestCPU_absY(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{indexY: 0}, address: 0x0F00,
+			pcMovement: 2, wantValue: 0x15},
+		{name: "advance",
+			cpu: &CPU{indexY: 0x25}, address: 0x0F00,
+			pcMovement: 2, wantValue: 0x15},
+		{name: "page overflow",
+			cpu: &CPU{indexY: 0x40}, address: 0x0FDD,
+			pcMovement: 2, wantValue: 0x15},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedPC := tt.setupAddressTest()
+			adr := tt.address + uint16(tt.cpu.indexY)
+			tt.cpu.WriteBus(adr, tt.wantValue)
+			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
+			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
+
 			if gotValue := tt.cpu.absY(); gotValue != tt.wantValue {
-				t.Errorf("CPU.absY() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.absY() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -106,12 +142,19 @@ func TestCPU_absY(t *testing.T) {
 
 func TestCPU_imm(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{},
+			pcMovement: 1, wantValue: 0x15},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			expectedPC := tt.setupAddressTest()
+			tt.cpu.WriteBus(expectedPC, tt.wantValue)
 			if gotValue := tt.cpu.imm(); gotValue != tt.wantValue {
-				t.Errorf("CPU.imm() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.imm() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}
@@ -119,7 +162,8 @@ func TestCPU_imm(t *testing.T) {
 
 func TestCPU_impl(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{},
+			pcMovement: 0, wantValue: 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
