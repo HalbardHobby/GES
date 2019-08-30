@@ -218,11 +218,19 @@ func TestCPU_xInd(t *testing.T) {
 	}
 	for _, tt := range tests {
 		expectedPC := tt.setupAddressTest()
-		tt.cpu.WriteBus(tt.address+uint16(tt.cpu.indexX), tt.wantValue)
-		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address)&0xFF)
+		effAdr := uint16(0x5F2A)
+
+		tt.cpu.WriteBus((tt.address+uint16(tt.cpu.indexX))%256,
+			uint8(effAdr&0xFF))
+		tt.cpu.WriteBus((tt.address+uint16(tt.cpu.indexX)+1)%256,
+			uint8(effAdr>>8))
+
+		tt.cpu.WriteBus(effAdr, tt.wantValue)
+		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
+
 		t.Run(tt.name, func(t *testing.T) {
 			if gotValue := tt.cpu.xInd(); gotValue != tt.wantValue {
-				t.Errorf("CPU.xInd() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.xInd() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
 				t.Errorf("counter is 0x%X, should be 0x%X",
@@ -234,12 +242,32 @@ func TestCPU_xInd(t *testing.T) {
 
 func TestCPU_indY(t *testing.T) {
 	tests := []addressTest{
-		// TODO: Add test cases.
+		{name: "static", cpu: &CPU{},
+			address: 0x00DE, pcMovement: 1, wantValue: 0x15},
+		{name: "standard", cpu: &CPU{indexY: 0x05},
+			address: 0x00DE, pcMovement: 1, wantValue: 0x15},
+		{name: "overflow", cpu: &CPU{indexY: 0x30},
+			address: 0x00DE, pcMovement: 1, wantValue: 0x15},
 	}
 	for _, tt := range tests {
+		expectedPC := tt.setupAddressTest()
+		effAdr := uint16(0x5F2A)
+
+		tt.cpu.WriteBus((tt.address)%256,
+			uint8(effAdr&0xFF))
+		tt.cpu.WriteBus((tt.address+1)%256,
+			uint8(effAdr>>8))
+
+		tt.cpu.WriteBus(effAdr+uint16(tt.cpu.indexY), tt.wantValue)
+		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
+
 		t.Run(tt.name, func(t *testing.T) {
 			if gotValue := tt.cpu.indY(); gotValue != tt.wantValue {
-				t.Errorf("CPU.indY() = %v, want %v", gotValue, tt.wantValue)
+				t.Errorf("CPU.indY() = 0x%X, want 0x%X", gotValue, tt.wantValue)
+			}
+			if tt.cpu.programCounter != expectedPC {
+				t.Errorf("counter is 0x%X, should be 0x%X",
+					tt.cpu.programCounter, expectedPC)
 			}
 		})
 	}

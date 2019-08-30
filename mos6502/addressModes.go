@@ -52,12 +52,15 @@ func (c *CPU) impl() (value uint8) {
 }
 
 func (c *CPU) ind() (value uint8) {
+	// retireve address
 	lo := uint16(c.ReadBus(c.programCounter))
 	c.programCounter++
 	hi := uint16(c.ReadBus(c.programCounter))
 	c.programCounter++
 
+	// Create address
 	tempAddr := lo | (hi << 8)
+	// Retrieve expected address
 	addrLo := uint16(c.ReadBus(tempAddr))
 	addrHi := uint16(c.ReadBus(tempAddr + 1))
 
@@ -65,11 +68,27 @@ func (c *CPU) ind() (value uint8) {
 }
 
 func (c *CPU) xInd() (value uint8) {
-	return
+	// Calculate address
+	address := c.ReadBus(c.programCounter) + c.indexX
+	c.programCounter++
+	// Obtener dirección efectiva
+	lo := uint16(c.ReadBus(uint16(address)))
+	hi := uint16(c.ReadBus(uint16(address + 1)))
+
+	// Retornar valor
+	return c.ReadBus(lo | (hi << 8))
 }
 
 func (c *CPU) indY() (value uint8) {
-	return
+	// Calculate address
+	address := c.ReadBus(c.programCounter)
+	c.programCounter++
+	// Obtener dirección efectiva
+	lo := uint16(c.ReadBus(uint16(address)))
+	hi := uint16(c.ReadBus(uint16(address + 1)))
+
+	// Retornar valor
+	return c.ReadBus((lo | (hi << 8)) + uint16(c.indexY))
 }
 
 // relative is a special adressing mode used by branching functions
