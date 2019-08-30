@@ -44,7 +44,7 @@ func TestCPU_acc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedCounter := tt.setupAddressTest()
-			if gotValue := tt.cpu.acc(); gotValue != tt.wantValue {
+			if gotValue := acc(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.acc() = %v, want %v", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedCounter {
@@ -66,7 +66,7 @@ func TestCPU_abs(t *testing.T) {
 			tt.cpu.WriteBus(tt.address, tt.wantValue)
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
 			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
-			if gotValue := tt.cpu.abs(); gotValue != tt.wantValue {
+			if gotValue := abs(tt.cpu); gotValue != tt.wantValue {
 
 				t.Errorf("CPU.abs() = %v, want %v", gotValue, tt.wantValue)
 			}
@@ -98,7 +98,7 @@ func TestCPU_absX(t *testing.T) {
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
 			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
 
-			if gotValue := tt.cpu.absX(); gotValue != tt.wantValue {
+			if gotValue := absX(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.absX() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -129,7 +129,7 @@ func TestCPU_absY(t *testing.T) {
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
 			tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
 
-			if gotValue := tt.cpu.absY(); gotValue != tt.wantValue {
+			if gotValue := absY(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.absY() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -149,7 +149,7 @@ func TestCPU_imm(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedPC := tt.setupAddressTest()
 			tt.cpu.WriteBus(tt.cpu.programCounter, tt.wantValue)
-			if gotValue := tt.cpu.imm(); gotValue != tt.wantValue {
+			if gotValue := imm(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.imm() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -168,7 +168,7 @@ func TestCPU_impl(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedPC := tt.setupAddressTest()
-			if gotValue := tt.cpu.impl(); gotValue != tt.wantValue {
+			if gotValue := impl(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.impl() = %v, want %v", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -196,7 +196,7 @@ func TestCPU_ind(t *testing.T) {
 		tt.cpu.WriteBus(tt.address, tt.wantValue)
 
 		t.Run(tt.name, func(t *testing.T) {
-			if gotValue := tt.cpu.ind(); gotValue != tt.wantValue {
+			if gotValue := ind(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.ind() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -229,7 +229,7 @@ func TestCPU_xInd(t *testing.T) {
 		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
 
 		t.Run(tt.name, func(t *testing.T) {
-			if gotValue := tt.cpu.xInd(); gotValue != tt.wantValue {
+			if gotValue := xInd(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.xInd() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -262,7 +262,7 @@ func TestCPU_indY(t *testing.T) {
 		tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address&0xFF))
 
 		t.Run(tt.name, func(t *testing.T) {
-			if gotValue := tt.cpu.indY(); gotValue != tt.wantValue {
+			if gotValue := indY(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.indY() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -289,7 +289,7 @@ func TestCPU_rel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			expectedPC := tt.setupAddressTest()
 			tt.cpu.WriteBus(tt.cpu.programCounter, tt.wantValue)
-			if gotValue := tt.cpu.rel(); gotValue != tt.wantValue {
+			if gotValue := rel(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.rel() = %v, want %v", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedPC {
@@ -311,7 +311,7 @@ func TestCPU_zpg(t *testing.T) {
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
 			tt.cpu.WriteBus(tt.address, tt.wantValue)
 
-			if gotValue := tt.cpu.zpg(); gotValue != tt.wantValue {
+			if gotValue := zpg(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.zpg() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedCounter {
@@ -335,7 +335,7 @@ func TestCPU_zpgX(t *testing.T) {
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
 			tt.cpu.WriteBus((tt.address+uint16(tt.cpu.indexX))&0x00FF,
 				tt.wantValue)
-			if gotValue := tt.cpu.zpgX(); gotValue != tt.wantValue {
+			if gotValue := zpgX(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.zpgX() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedCounter {
@@ -359,7 +359,7 @@ func TestCPU_zpgY(t *testing.T) {
 			tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
 			tt.cpu.WriteBus((tt.address+uint16(tt.cpu.indexY))&0x00FF,
 				tt.wantValue)
-			if gotValue := tt.cpu.zpgY(); gotValue != tt.wantValue {
+			if gotValue := zpgY(tt.cpu); gotValue != tt.wantValue {
 				t.Errorf("CPU.zpgY() = 0x%X, want 0x%X", gotValue, tt.wantValue)
 			}
 			if tt.cpu.programCounter != expectedCounter {
