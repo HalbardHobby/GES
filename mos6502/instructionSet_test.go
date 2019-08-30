@@ -1,1011 +1,627 @@
 package mos6502
 
-import "testing"
+import (
+	"testing"
+)
+
+type instructionTest struct {
+	name    string
+	c       *CPU
+	operand addressMode
+}
 
 func TestCPU_adc(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.adc(tt.args.operand)
+			tt.c.adc(tt.operand)
 		})
 	}
 }
 
 func TestCPU_and(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.and(tt.args.operand)
+			tt.c.and(tt.operand)
 		})
 	}
 }
 
 func TestCPU_asl(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.asl(tt.args.operand)
+			tt.c.asl(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bcc(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bcc(tt.args.operand)
+			tt.c.bcc(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bcs(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bcs(tt.args.operand)
+			tt.c.bcs(tt.operand)
 		})
 	}
 }
 
 func TestCPU_beq(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.beq(tt.args.operand)
+			tt.c.beq(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bit(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bit(tt.args.operand)
+			tt.c.bit(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bmi(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bmi(tt.args.operand)
+			tt.c.bmi(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bne(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bne(tt.args.operand)
+			tt.c.bne(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bpl(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bpl(tt.args.operand)
+			tt.c.bpl(tt.operand)
 		})
 	}
 }
 
 func TestCPU_brk(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.brk(tt.args.operand)
+			tt.c.brk(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bvc(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bvc(tt.args.operand)
+			tt.c.bvc(tt.operand)
 		})
 	}
 }
 
 func TestCPU_bvs(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bvs(tt.args.operand)
+			tt.c.bvs(tt.operand)
 		})
 	}
 }
 
 func TestCPU_clc(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.clc(tt.args.operand)
+			tt.c.clc(tt.operand)
 		})
 	}
 }
 
 func TestCPU_cld(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cld(tt.args.operand)
+			tt.c.cld(tt.operand)
 		})
 	}
 }
 
 func TestCPU_cli(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cli(tt.args.operand)
+			tt.c.cli(tt.operand)
 		})
 	}
 }
 
 func TestCPU_clv(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.clv(tt.args.operand)
+			tt.c.clv(tt.operand)
 		})
 	}
 }
 
 func TestCPU_cmp(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cmp(tt.args.operand)
+			tt.c.cmp(tt.operand)
 		})
 	}
 }
 
 func TestCPU_cpx(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cpx(tt.args.operand)
+			tt.c.cpx(tt.operand)
 		})
 	}
 }
 
 func TestCPU_cpy(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cpy(tt.args.operand)
+			tt.c.cpy(tt.operand)
 		})
 	}
 }
 
 func TestCPU_dec(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.dec(tt.args.operand)
+			tt.c.dec(tt.operand)
 		})
 	}
 }
 
 func TestCPU_dex(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.dex(tt.args.operand)
+			tt.c.dex(tt.operand)
 		})
 	}
 }
 
 func TestCPU_dey(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.dey(tt.args.operand)
+			tt.c.dey(tt.operand)
 		})
 	}
 }
 
 func TestCPU_eor(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.eor(tt.args.operand)
+			tt.c.eor(tt.operand)
 		})
 	}
 }
 
 func TestCPU_inc(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.inc(tt.args.operand)
+			tt.c.inc(tt.operand)
 		})
 	}
 }
 
 func TestCPU_inx(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.inx(tt.args.operand)
+			tt.c.inx(tt.operand)
 		})
 	}
 }
 
 func TestCPU_iny(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.iny(tt.args.operand)
+			tt.c.iny(tt.operand)
 		})
 	}
 }
 
 func TestCPU_jmp(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.jmp(tt.args.operand)
+			tt.c.jmp(tt.operand)
 		})
 	}
 }
 
 func TestCPU_jsr(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.jsr(tt.args.operand)
+			tt.c.jsr(tt.operand)
 		})
 	}
 }
 
 func TestCPU_lda(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.lda(tt.args.operand)
+			tt.c.lda(tt.operand)
 		})
 	}
 }
 
 func TestCPU_ldx(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ldx(tt.args.operand)
+			tt.c.ldx(tt.operand)
 		})
 	}
 }
 
 func TestCPU_ldy(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ldy(tt.args.operand)
+			tt.c.ldy(tt.operand)
 		})
 	}
 }
 
 func TestCPU_lsr(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.lsr(tt.args.operand)
+			tt.c.lsr(tt.operand)
 		})
 	}
 }
 
 func TestCPU_nop(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.nop(tt.args.operand)
+			tt.c.nop(tt.operand)
 		})
 	}
 }
 
 func TestCPU_ora(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ora(tt.args.operand)
+			tt.c.ora(tt.operand)
 		})
 	}
 }
 
 func TestCPU_pha(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.pha(tt.args.operand)
+			tt.c.pha(tt.operand)
 		})
 	}
 }
 
 func TestCPU_php(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.php(tt.args.operand)
+			tt.c.php(tt.operand)
 		})
 	}
 }
 
 func TestCPU_pla(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.pla(tt.args.operand)
+			tt.c.pla(tt.operand)
 		})
 	}
 }
 
 func TestCPU_plp(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.plp(tt.args.operand)
+			tt.c.plp(tt.operand)
 		})
 	}
 }
 
 func TestCPU_rol(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.rol(tt.args.operand)
+			tt.c.rol(tt.operand)
 		})
 	}
 }
 
 func TestCPU_ror(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ror(tt.args.operand)
+			tt.c.ror(tt.operand)
 		})
 	}
 }
 
 func TestCPU_rti(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.rti(tt.args.operand)
+			tt.c.rti(tt.operand)
 		})
 	}
 }
 
 func TestCPU_rts(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.rts(tt.args.operand)
+			tt.c.rts(tt.operand)
 		})
 	}
 }
 
 func TestCPU_sbc(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sbc(tt.args.operand)
+			tt.c.sbc(tt.operand)
 		})
 	}
 }
 
 func TestCPU_sec(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sec(tt.args.operand)
+			tt.c.sec(tt.operand)
 		})
 	}
 }
 
 func TestCPU_sed(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sed(tt.args.operand)
+			tt.c.sed(tt.operand)
 		})
 	}
 }
 
 func TestCPU_sei(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sei(tt.args.operand)
+			tt.c.sei(tt.operand)
 		})
 	}
 }
 
 func TestCPU_sta(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sta(tt.args.operand)
+			tt.c.sta(tt.operand)
 		})
 	}
 }
 
 func TestCPU_stx(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.stx(tt.args.operand)
+			tt.c.stx(tt.operand)
 		})
 	}
 }
 
 func TestCPU_sty(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sty(tt.args.operand)
+			tt.c.sty(tt.operand)
 		})
 	}
 }
 
 func TestCPU_tax(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tax(tt.args.operand)
+			tt.c.tax(tt.operand)
 		})
 	}
 }
 
 func TestCPU_tay(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tay(tt.args.operand)
+			tt.c.tay(tt.operand)
 		})
 	}
 }
 
 func TestCPU_tsx(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tsx(tt.args.operand)
+			tt.c.tsx(tt.operand)
 		})
 	}
 }
 
 func TestCPU_txa(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.txa(tt.args.operand)
+			tt.c.txa(tt.operand)
 		})
 	}
 }
 
 func TestCPU_txs(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.txs(tt.args.operand)
+			tt.c.txs(tt.operand)
 		})
 	}
 }
 
 func TestCPU_tya(t *testing.T) {
-	type args struct {
-		operand addressMode
-	}
-	tests := []struct {
-		name string
-		cpu  *CPU
-		args args
-	}{
+	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tya(tt.args.operand)
+			tt.c.tya(tt.operand)
 		})
 	}
 }
