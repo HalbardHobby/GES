@@ -57,6 +57,13 @@ func (f *flagSet) clear(bits flagSet) {
 func (f *flagSet) toggle(bits flagSet) {
 	*f = *f ^ bits
 }
+func (f *flagSet) setValue(bits flagSet, value bool) {
+	if value {
+		f.set(bits)
+	} else {
+		f.clear(bits)
+	}
+}
 func (f flagSet) has(bits flagSet) bool {
 	return f&bits != 0
 }

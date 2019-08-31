@@ -2,207 +2,229 @@ package mos6502
 
 // OPCODES IMPLEMENTATION //
 
-func (c *CPU) adc(operand addressMode) {
+type opcode func()
 
+func adc(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) and(operand addressMode) {
+func and(c *CPU, operand addressMode) opcode {
+	and := func() {
+		val := operand(c)
+		c.accumulator &= val
 
+		c.processorStatus.setValue(negative, c.accumulator&0x80 != 0)
+		c.processorStatus.setValue(zero, c.accumulator == 0)
+	}
+	return and
 }
 
-func (c *CPU) asl(operand addressMode) {
-
+func asl(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bcc(operand addressMode) {
-
+func bcc(c *CPU, operand addressMode) opcode {
+	bcc := func() {
+		var val = uint16(operand(c))
+		if val&0x80 != 0 {
+			val |= 0xFF00
+		}
+		if !c.processorStatus.has(carry) {
+			c.programCounter += val
+		}
+	}
+	return bcc
 }
 
-func (c *CPU) bcs(operand addressMode) {
-
+func bcs(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) beq(operand addressMode) {
-
+func beq(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bit(operand addressMode) {
-
+func bit(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bmi(operand addressMode) {
-
+func bmi(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bne(operand addressMode) {
-
+func bne(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bpl(operand addressMode) {
-
+func bpl(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) brk(operand addressMode) {
-
+func brk(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bvc(operand addressMode) {
-
+func bvc(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) bvs(operand addressMode) {
-
+func bvs(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) clc(operand addressMode) {
+func clc(c *CPU, operand addressMode) opcode {
 	c.processorStatus.clear(carry)
+	return func() {}
 }
 
-func (c *CPU) cld(operand addressMode) {
+func cld(c *CPU, operand addressMode) opcode {
 	c.processorStatus.clear(decimal)
+	return func() {}
 }
 
-func (c *CPU) cli(operand addressMode) {
+func cli(c *CPU, operand addressMode) opcode {
 	c.processorStatus.clear(interruptDisable)
+	return func() {}
 }
 
-func (c *CPU) clv(operand addressMode) {
+func clv(c *CPU, operand addressMode) opcode {
 	c.processorStatus.clear(overflow)
+	return func() {}
 }
 
-func (c *CPU) cmp(operand addressMode) {
-
+func cmp(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) cpx(operand addressMode) {
-
+func cpx(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) cpy(operand addressMode) {
-
+func cpy(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) dec(operand addressMode) {
-
+func dec(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) dex(operand addressMode) {
-
+func dex(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) dey(operand addressMode) {
-
+func dey(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) eor(operand addressMode) {
-
+func eor(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) inc(operand addressMode) {
-
+func inc(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) inx(operand addressMode) {
-
+func inx(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) iny(operand addressMode) {
-
+func iny(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) jmp(operand addressMode) {
-
+func jmp(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) jsr(operand addressMode) {
-
+func jsr(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) lda(operand addressMode) {
-
+func lda(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) ldx(operand addressMode) {
-
+func ldx(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) ldy(operand addressMode) {
-
+func ldy(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) lsr(operand addressMode) {
-
+func lsr(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) nop(operand addressMode) {
-	return
+func nop(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) ora(operand addressMode) {
-
+func ora(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) pha(operand addressMode) {
-
+func pha(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) php(operand addressMode) {
-
+func php(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) pla(operand addressMode) {
-
+func pla(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) plp(operand addressMode) {
-
+func plp(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) rol(operand addressMode) {
-
+func rol(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) ror(operand addressMode) {
-
+func ror(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) rti(operand addressMode) {
-
+func rti(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) rts(operand addressMode) {
-
+func rts(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) sbc(operand addressMode) {
-
+func sbc(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) sec(operand addressMode) {
-
+func sec(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) sed(operand addressMode) {
-
+func sed(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) sei(operand addressMode) {
-
+func sei(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) sta(operand addressMode) {
-
+func sta(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) stx(operand addressMode) {
-
+func stx(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) sty(operand addressMode) {
-
+func sty(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) tax(operand addressMode) {
+func tax(c *CPU, operand addressMode) opcode {
 	c.indexX = c.accumulator
 	if c.indexX == 0x00 {
 		c.processorStatus.set(zero)
@@ -210,24 +232,25 @@ func (c *CPU) tax(operand addressMode) {
 	if c.indexX&0x80 == 0x80 {
 		c.processorStatus.set(negative)
 	}
+	return func() {}
 }
 
-func (c *CPU) tay(operand addressMode) {
-
+func tay(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) tsx(operand addressMode) {
-
+func tsx(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) txa(operand addressMode) {
-
+func txa(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) txs(operand addressMode) {
-
+func txs(c *CPU, operand addressMode) opcode {
+	return func() {}
 }
 
-func (c *CPU) tya(operand addressMode) {
-
+func tya(c *CPU, operand addressMode) opcode {
+	return func() {}
 }

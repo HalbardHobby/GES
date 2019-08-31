@@ -5,631 +5,672 @@ import (
 )
 
 type instructionTest struct {
-	name        string
-	cpu         *CPU
-	flags       flagSet
-	wantedValue uint8
+	name      string
+	cpu       *CPU
+	flags     flagSet
+	testValue uint8
 }
 
+// Test address mode
 func testOperand(c *CPU) uint8 {
-	return 0
+	return _testVal
 }
 
-func TestCPU_adc(t *testing.T) {
+var _testVal uint8
+
+func Test_adc(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.adc(testOperand)
+			adc(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_and(t *testing.T) {
+func Test_and(t *testing.T) {
 
 	tests := []instructionTest{
-		{name: "base", cpu: &CPU{}, flags: 0},
-		{name: "negative"},
-		{name: "zero"},
+		{name: "base",
+			cpu: &CPU{accumulator: 0x41}, flags: 0, testValue: 0x7B},
+		{name: "negative",
+			cpu: &CPU{accumulator: 0x8F}, flags: negative, testValue: 0x9F},
+		{name: "zero",
+			cpu: &CPU{accumulator: 0x41}, flags: zero, testValue: 0x24},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.and(testOperand)
+			expected := tt.cpu.accumulator & tt.testValue
+
+			_testVal = tt.testValue
+			and := and(tt.cpu, testOperand)
+			and()
+
+			if tt.cpu.accumulator != expected {
+				t.Errorf("and() = %b, wanted %b", tt.cpu.accumulator, expected)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
-func TestCPU_asl(t *testing.T) {
-	tests := []instructionTest{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.asl(testOperand)
-		})
-	}
-}
-
-func TestCPU_bcc(t *testing.T) {
-	tests := []instructionTest{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bcc(testOperand)
-		})
-	}
-}
-
-func TestCPU_bcs(t *testing.T) {
+func Test_asl(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bcs(testOperand)
+			asl(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_beq(t *testing.T) {
+func Test_bcc(t *testing.T) {
+	tests := []instructionTest{
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: carry},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x9F},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			expected := tt.cpu.programCounter
+
+			if !tt.cpu.processorStatus.has(carry) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+
+			_testVal = tt.testValue
+			bcc := bcc(tt.cpu, testOperand)
+			bcc()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bcc() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
+		})
+	}
+}
+
+func Test_bcs(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.beq(testOperand)
+			bcs(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_bit(t *testing.T) {
+func Test_beq(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bit(testOperand)
+			beq(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_bmi(t *testing.T) {
+func Test_bit(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bmi(testOperand)
+			bit(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_bne(t *testing.T) {
+func Test_bmi(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bne(testOperand)
+			bmi(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_bpl(t *testing.T) {
+func Test_bne(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bpl(testOperand)
+			bne(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_brk(t *testing.T) {
+func Test_bpl(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.brk(testOperand)
+			bpl(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_bvc(t *testing.T) {
+func Test_brk(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bvc(testOperand)
+			brk(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_bvs(t *testing.T) {
+func Test_bvc(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.bvs(testOperand)
+			bvc(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_clc(t *testing.T) {
+func Test_bvs(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.clc(testOperand)
+			bvs(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_cld(t *testing.T) {
+func Test_clc(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cld(testOperand)
+			clc(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_cli(t *testing.T) {
+func Test_cld(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cli(testOperand)
+			cld(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_clv(t *testing.T) {
+func Test_cli(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.clv(testOperand)
+			cli(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_cmp(t *testing.T) {
+func Test_clv(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cmp(testOperand)
+			clv(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_cpx(t *testing.T) {
+func Test_cmp(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cpx(testOperand)
+			cmp(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_cpy(t *testing.T) {
+func Test_cpx(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.cpy(testOperand)
+			cpx(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_dec(t *testing.T) {
+func Test_cpy(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.dec(testOperand)
+			cpy(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_dex(t *testing.T) {
+func Test_dec(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.dex(testOperand)
+			dec(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_dey(t *testing.T) {
+func Test_dex(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.dey(testOperand)
+			dex(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_eor(t *testing.T) {
+func Test_dey(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.eor(testOperand)
+			dey(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_inc(t *testing.T) {
+func Test_eor(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.inc(testOperand)
+			eor(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_inx(t *testing.T) {
+func Test_inc(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.inx(testOperand)
+			inc(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_iny(t *testing.T) {
+func Test_inx(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.iny(testOperand)
+			inx(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_jmp(t *testing.T) {
+func Test_iny(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.jmp(testOperand)
+			iny(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_jsr(t *testing.T) {
+func Test_jmp(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.jsr(testOperand)
+			jmp(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_lda(t *testing.T) {
+func Test_jsr(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.lda(testOperand)
+			jsr(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_ldx(t *testing.T) {
+func Test_lda(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ldx(testOperand)
+			lda(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_ldy(t *testing.T) {
+func Test_ldx(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ldy(testOperand)
+			ldx(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_lsr(t *testing.T) {
+func Test_ldy(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.lsr(testOperand)
+			ldy(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_nop(t *testing.T) {
+func Test_lsr(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.nop(testOperand)
+			lsr(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_ora(t *testing.T) {
+func Test_nop(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ora(testOperand)
+			nop(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_pha(t *testing.T) {
+func Test_ora(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.pha(testOperand)
+			ora(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_php(t *testing.T) {
+func Test_pha(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.php(testOperand)
+			pha(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_pla(t *testing.T) {
+func Test_php(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.pla(testOperand)
+			php(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_plp(t *testing.T) {
+func Test_pla(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.plp(testOperand)
+			pla(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_rol(t *testing.T) {
+func Test_plp(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.rol(testOperand)
+			plp(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_ror(t *testing.T) {
+func Test_rol(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.ror(testOperand)
+			rol(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_rti(t *testing.T) {
+func Test_ror(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.rti(testOperand)
+			ror(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_rts(t *testing.T) {
+func Test_rti(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.rts(testOperand)
+			rti(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_sbc(t *testing.T) {
+func Test_rts(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sbc(testOperand)
+			rts(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_sec(t *testing.T) {
+func Test_sbc(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sec(testOperand)
+			sbc(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_sed(t *testing.T) {
+func Test_sec(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sed(testOperand)
+			sec(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_sei(t *testing.T) {
+func Test_sed(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sei(testOperand)
+			sed(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_sta(t *testing.T) {
+func Test_sei(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sta(testOperand)
+			sei(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_stx(t *testing.T) {
+func Test_sta(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.stx(testOperand)
+			sta(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_sty(t *testing.T) {
+func Test_stx(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.sty(testOperand)
+			stx(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_tax(t *testing.T) {
+func Test_sty(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tax(testOperand)
+			sty(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_tay(t *testing.T) {
+func Test_tax(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tay(testOperand)
+			tax(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_tsx(t *testing.T) {
+func Test_tay(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tsx(testOperand)
+			tay(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_txa(t *testing.T) {
+func Test_tsx(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.txa(testOperand)
+			tsx(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_txs(t *testing.T) {
+func Test_txa(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.txs(testOperand)
+			txa(tt.cpu, testOperand)
 		})
 	}
 }
 
-func TestCPU_tya(t *testing.T) {
+func Test_txs(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.cpu.tya(testOperand)
+			txs(tt.cpu, testOperand)
+		})
+	}
+}
+
+func Test_tya(t *testing.T) {
+	tests := []instructionTest{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tya(tt.cpu, testOperand)
 		})
 	}
 }
