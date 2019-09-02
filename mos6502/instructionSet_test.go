@@ -606,7 +606,7 @@ func Test_sty(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sty(tt.cpu, imm)
+			sty(tt.cpu, zpg)
 		})
 	}
 }
