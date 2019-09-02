@@ -11,12 +11,14 @@ type instructionTest struct {
 	testValue uint8
 }
 
-// Test address mode
-func testOperand(c *CPU) uint8 {
-	return _testVal
-}
+var _testAddr uint16
 
-var _testVal uint8
+func (tt *instructionTest) setupInstructionTest() {
+	read, write := getTestMemory()
+	tt.cpu.ReadBus = read
+	tt.cpu.WriteBus = write
+	return
+}
 
 func Test_adc(t *testing.T) {
 	tests := []instructionTest{
@@ -24,7 +26,7 @@ func Test_adc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			adc(tt.cpu, testOperand)
+			adc(tt.cpu, imm)
 		})
 	}
 }
@@ -42,9 +44,10 @@ func Test_and(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			expected := tt.cpu.accumulator & tt.testValue
+			tt.setupInstructionTest()
 
-			_testVal = tt.testValue
-			and := and(tt.cpu, testOperand)
+			and := and(tt.cpu, imm)
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
 			and()
 
 			if tt.cpu.accumulator != expected {
@@ -63,7 +66,7 @@ func Test_asl(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			asl(tt.cpu, testOperand)
+			asl(tt.cpu, imm)
 		})
 	}
 }
@@ -82,8 +85,8 @@ func Test_bcc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			expected := tt.cpu.programCounter
-
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
 			if !tt.cpu.processorStatus.has(carry) {
 				var movement = uint16(tt.testValue)
 				if tt.testValue&0x80 != 0 {
@@ -91,9 +94,8 @@ func Test_bcc(t *testing.T) {
 				}
 				expected += movement
 			}
-
-			_testVal = tt.testValue
-			bcc := bcc(tt.cpu, testOperand)
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bcc := bcc(tt.cpu, rel)
 			bcc()
 
 			if tt.cpu.programCounter != expected {
@@ -109,7 +111,7 @@ func Test_bcs(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bcs(tt.cpu, testOperand)
+			bcs(tt.cpu, imm)
 		})
 	}
 }
@@ -120,7 +122,7 @@ func Test_beq(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			beq(tt.cpu, testOperand)
+			beq(tt.cpu, imm)
 		})
 	}
 }
@@ -131,7 +133,7 @@ func Test_bit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bit(tt.cpu, testOperand)
+			bit(tt.cpu, imm)
 		})
 	}
 }
@@ -142,7 +144,7 @@ func Test_bmi(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bmi(tt.cpu, testOperand)
+			bmi(tt.cpu, imm)
 		})
 	}
 }
@@ -153,7 +155,7 @@ func Test_bne(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bne(tt.cpu, testOperand)
+			bne(tt.cpu, imm)
 		})
 	}
 }
@@ -164,7 +166,7 @@ func Test_bpl(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bpl(tt.cpu, testOperand)
+			bpl(tt.cpu, imm)
 		})
 	}
 }
@@ -175,7 +177,7 @@ func Test_brk(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			brk(tt.cpu, testOperand)
+			brk(tt.cpu, imm)
 		})
 	}
 }
@@ -186,7 +188,7 @@ func Test_bvc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bvc(tt.cpu, testOperand)
+			bvc(tt.cpu, imm)
 		})
 	}
 }
@@ -197,7 +199,7 @@ func Test_bvs(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bvs(tt.cpu, testOperand)
+			bvs(tt.cpu, imm)
 		})
 	}
 }
@@ -208,7 +210,7 @@ func Test_clc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			clc(tt.cpu, testOperand)
+			clc(tt.cpu, imm)
 		})
 	}
 }
@@ -219,7 +221,7 @@ func Test_cld(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cld(tt.cpu, testOperand)
+			cld(tt.cpu, imm)
 		})
 	}
 }
@@ -230,7 +232,7 @@ func Test_cli(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cli(tt.cpu, testOperand)
+			cli(tt.cpu, imm)
 		})
 	}
 }
@@ -241,7 +243,7 @@ func Test_clv(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			clv(tt.cpu, testOperand)
+			clv(tt.cpu, imm)
 		})
 	}
 }
@@ -252,7 +254,7 @@ func Test_cmp(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cmp(tt.cpu, testOperand)
+			cmp(tt.cpu, imm)
 		})
 	}
 }
@@ -263,7 +265,7 @@ func Test_cpx(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cpx(tt.cpu, testOperand)
+			cpx(tt.cpu, imm)
 		})
 	}
 }
@@ -274,7 +276,7 @@ func Test_cpy(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cpy(tt.cpu, testOperand)
+			cpy(tt.cpu, imm)
 		})
 	}
 }
@@ -285,7 +287,7 @@ func Test_dec(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dec(tt.cpu, testOperand)
+			dec(tt.cpu, imm)
 		})
 	}
 }
@@ -296,7 +298,7 @@ func Test_dex(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dex(tt.cpu, testOperand)
+			dex(tt.cpu, imm)
 		})
 	}
 }
@@ -307,7 +309,7 @@ func Test_dey(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dey(tt.cpu, testOperand)
+			dey(tt.cpu, imm)
 		})
 	}
 }
@@ -318,7 +320,7 @@ func Test_eor(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			eor(tt.cpu, testOperand)
+			eor(tt.cpu, imm)
 		})
 	}
 }
@@ -329,7 +331,7 @@ func Test_inc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			inc(tt.cpu, testOperand)
+			inc(tt.cpu, imm)
 		})
 	}
 }
@@ -340,7 +342,7 @@ func Test_inx(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			inx(tt.cpu, testOperand)
+			inx(tt.cpu, imm)
 		})
 	}
 }
@@ -351,7 +353,7 @@ func Test_iny(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			iny(tt.cpu, testOperand)
+			iny(tt.cpu, imm)
 		})
 	}
 }
@@ -362,7 +364,7 @@ func Test_jmp(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			jmp(tt.cpu, testOperand)
+			jmp(tt.cpu, imm)
 		})
 	}
 }
@@ -373,7 +375,7 @@ func Test_jsr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			jsr(tt.cpu, testOperand)
+			jsr(tt.cpu, imm)
 		})
 	}
 }
@@ -384,7 +386,7 @@ func Test_lda(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			lda(tt.cpu, testOperand)
+			lda(tt.cpu, imm)
 		})
 	}
 }
@@ -395,7 +397,7 @@ func Test_ldx(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ldx(tt.cpu, testOperand)
+			ldx(tt.cpu, imm)
 		})
 	}
 }
@@ -406,7 +408,7 @@ func Test_ldy(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ldy(tt.cpu, testOperand)
+			ldy(tt.cpu, imm)
 		})
 	}
 }
@@ -417,7 +419,7 @@ func Test_lsr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			lsr(tt.cpu, testOperand)
+			lsr(tt.cpu, imm)
 		})
 	}
 }
@@ -428,7 +430,7 @@ func Test_nop(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			nop(tt.cpu, testOperand)
+			nop(tt.cpu, imm)
 		})
 	}
 }
@@ -439,7 +441,7 @@ func Test_ora(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ora(tt.cpu, testOperand)
+			ora(tt.cpu, imm)
 		})
 	}
 }
@@ -450,7 +452,7 @@ func Test_pha(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pha(tt.cpu, testOperand)
+			pha(tt.cpu, imm)
 		})
 	}
 }
@@ -461,7 +463,7 @@ func Test_php(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			php(tt.cpu, testOperand)
+			php(tt.cpu, imm)
 		})
 	}
 }
@@ -472,7 +474,7 @@ func Test_pla(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pla(tt.cpu, testOperand)
+			pla(tt.cpu, imm)
 		})
 	}
 }
@@ -483,7 +485,7 @@ func Test_plp(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			plp(tt.cpu, testOperand)
+			plp(tt.cpu, imm)
 		})
 	}
 }
@@ -494,7 +496,7 @@ func Test_rol(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rol(tt.cpu, testOperand)
+			rol(tt.cpu, imm)
 		})
 	}
 }
@@ -505,7 +507,7 @@ func Test_ror(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ror(tt.cpu, testOperand)
+			ror(tt.cpu, imm)
 		})
 	}
 }
@@ -516,7 +518,7 @@ func Test_rti(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rti(tt.cpu, testOperand)
+			rti(tt.cpu, imm)
 		})
 	}
 }
@@ -527,7 +529,7 @@ func Test_rts(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rts(tt.cpu, testOperand)
+			rts(tt.cpu, imm)
 		})
 	}
 }
@@ -538,7 +540,7 @@ func Test_sbc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sbc(tt.cpu, testOperand)
+			sbc(tt.cpu, imm)
 		})
 	}
 }
@@ -549,7 +551,7 @@ func Test_sec(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sec(tt.cpu, testOperand)
+			sec(tt.cpu, imm)
 		})
 	}
 }
@@ -560,7 +562,7 @@ func Test_sed(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sed(tt.cpu, testOperand)
+			sed(tt.cpu, imm)
 		})
 	}
 }
@@ -571,7 +573,7 @@ func Test_sei(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sei(tt.cpu, testOperand)
+			sei(tt.cpu, imm)
 		})
 	}
 }
@@ -582,7 +584,7 @@ func Test_sta(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sta(tt.cpu, testOperand)
+			sta(tt.cpu, imm)
 		})
 	}
 }
@@ -593,7 +595,7 @@ func Test_stx(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			stx(tt.cpu, testOperand)
+			stx(tt.cpu, imm)
 		})
 	}
 }
@@ -604,18 +606,35 @@ func Test_sty(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sty(tt.cpu, testOperand)
+			sty(tt.cpu, imm)
 		})
 	}
 }
 
 func Test_tax(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:   &CPU{accumulator: 0x41, indexX: 0x05},
+			flags: 0},
+		{name: "negative",
+			cpu:   &CPU{accumulator: 0xA0, indexX: 0x95},
+			flags: negative},
+		{name: "zero",
+			cpu:   &CPU{accumulator: 0x0, indexX: 0x00},
+			flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tax(tt.cpu, testOperand)
+			tt.setupInstructionTest()
+			tax := tax(tt.cpu, impl)
+			tax()
+
+			if tt.cpu.accumulator != tt.cpu.indexX {
+				t.Errorf("tax() = 0x%X wanted 0x%X", tt.cpu.accumulator, tt.cpu.indexX)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
@@ -626,7 +645,7 @@ func Test_tay(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tay(tt.cpu, testOperand)
+			tay(tt.cpu, imm)
 		})
 	}
 }
@@ -637,18 +656,34 @@ func Test_tsx(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tsx(tt.cpu, testOperand)
+			tsx(tt.cpu, imm)
 		})
 	}
 }
 
 func Test_txa(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:   &CPU{accumulator: 0x41, indexX: 0x05},
+			flags: 0},
+		{name: "negative",
+			cpu:   &CPU{accumulator: 0x8F, indexX: 0x95},
+			flags: negative},
+		{name: "zero",
+			cpu:   &CPU{accumulator: 0x41, indexX: 0x00},
+			flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			txa(tt.cpu, testOperand)
+			txa := txa(tt.cpu, imm)
+			txa()
+
+			if tt.cpu.accumulator != tt.cpu.indexX {
+				t.Errorf("txa() = 0x%X wanted 0x%X", tt.cpu.accumulator, tt.cpu.indexX)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
@@ -659,18 +694,33 @@ func Test_txs(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			txs(tt.cpu, testOperand)
+			txs(tt.cpu, imm)
 		})
 	}
 }
 
 func Test_tya(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:   &CPU{accumulator: 0x41, indexY: 0x05},
+			flags: 0},
+		{name: "negative",
+			cpu:   &CPU{accumulator: 0x8F, indexY: 0x95},
+			flags: negative},
+		{name: "zero",
+			cpu:   &CPU{accumulator: 0x41, indexY: 0x00},
+			flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tya(tt.cpu, testOperand)
+			tya := tya(tt.cpu, impl)
+			tya()
 		})
+		if tt.cpu.accumulator != tt.cpu.indexY {
+			t.Errorf("tya() = 0x%X wanted 0x%X", tt.cpu.accumulator, tt.cpu.indexY)
+		}
+		if tt.cpu.processorStatus != tt.flags {
+			t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+		}
 	}
 }
