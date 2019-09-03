@@ -126,26 +126,34 @@ func bvs(c *CPU, operand addressMode) opcode {
 
 // Clear carry flag
 func clc(c *CPU, operand addressMode) opcode {
-	c.processorStatus.clear(carry)
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.clear(carry)
+	}
 }
 
 // Clear decimal mode
 func cld(c *CPU, operand addressMode) opcode {
-	c.processorStatus.clear(decimal)
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.clear(decimal)
+	}
 }
 
 // Clear interrupt disable
 func cli(c *CPU, operand addressMode) opcode {
-	c.processorStatus.clear(interruptDisable)
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.clear(interruptDisable)
+	}
 }
 
 // Clear overflow flag
 func clv(c *CPU, operand addressMode) opcode {
-	c.processorStatus.clear(overflow)
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.clear(overflow)
+	}
 }
 
 // Compare Memory with Accumulator

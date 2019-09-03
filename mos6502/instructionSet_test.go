@@ -367,44 +367,68 @@ func Test_bvs(t *testing.T) {
 
 func Test_clc(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{programCounter: 0x8000, processorStatus: carry}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			clc(tt.cpu, imm)
+			clc := clc(tt.cpu, impl)
+			clc()
+
+			if tt.cpu.processorStatus.has(carry) {
+				t.Errorf("clc() didn't clear carry flag")
+			}
 		})
 	}
 }
 
 func Test_cld(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{programCounter: 0x8000, processorStatus: decimal}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cld(tt.cpu, imm)
+			cld := cld(tt.cpu, impl)
+			cld()
+
+			if tt.cpu.processorStatus.has(decimal) {
+				t.Errorf("cld() didn't clear decimal flag")
+			}
 		})
 	}
 }
 
 func Test_cli(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{programCounter: 0x8000, processorStatus: interruptDisable}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cli(tt.cpu, imm)
+			cli := cli(tt.cpu, impl)
+			cli()
+
+			if tt.cpu.processorStatus.has(interruptDisable) {
+				t.Errorf("cli() didn't clear interrupt disable flag")
+			}
 		})
 	}
 }
 
 func Test_clv(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{programCounter: 0x8000, processorStatus: overflow}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			clv(tt.cpu, imm)
+			clv := clv(tt.cpu, impl)
+			clv()
+
+			if tt.cpu.processorStatus.has(overflow) {
+				t.Errorf("clv() didn't clear overflow flag")
+			}
 		})
 	}
 }
