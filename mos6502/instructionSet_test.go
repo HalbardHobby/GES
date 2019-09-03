@@ -732,33 +732,45 @@ func Test_sbc(t *testing.T) {
 
 func Test_sec(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sec(tt.cpu, imm)
+			sec := sec(tt.cpu, impl)
+			sec()
+			if !tt.cpu.processorStatus.has(carry) {
+				t.Errorf("sec() didn't set carry flag")
+			}
 		})
 	}
 }
 
 func Test_sed(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sed(tt.cpu, imm)
+			sed := sed(tt.cpu, impl)
+			sed()
+			if !tt.cpu.processorStatus.has(decimal) {
+				t.Errorf("sed() didn't set decimal flag")
+			}
 		})
 	}
 }
 
 func Test_sei(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base", cpu: &CPU{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sei(tt.cpu, imm)
+			sei := sei(tt.cpu, impl)
+			sei()
+			if !tt.cpu.processorStatus.has(interruptDisable) {
+				t.Errorf("sei() didn't set interrupt flag")
+			}
 		})
 	}
 }

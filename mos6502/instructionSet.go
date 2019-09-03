@@ -7,6 +7,7 @@ type opcode func()
 // Add memory to accumulator with carry
 // A + M + C -> A, C
 func adc(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
@@ -24,6 +25,7 @@ func and(c *CPU, operand addressMode) opcode {
 }
 
 func asl(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
@@ -158,173 +160,212 @@ func clv(c *CPU, operand addressMode) opcode {
 
 // Compare Memory with Accumulator
 func cmp(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Compare Memory with Index X
 func cpx(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Compare Memory with Index Y
 func cpy(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Decrement memory by one
 // M - 1 -> M
 func dec(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Decrement X by One
 // X - 1-> X
 func dex(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Decrement Y by One
 // Y - 1 -> Y
 func dey(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Exclusive-Or Memory with accumulator
 // A XOR M -> A
 func eor(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Increment Memory by one
 // M + 1 -> M
 func inc(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Increment X by one
 // X + 1 -> X
 func inx(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Increment Y by One
 // Y + 1 -> Y
 func iny(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Jump to new location
 func jmp(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func jsr(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Load Accumulator with Memory
 // M -> A
 func lda(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Load X with Memory
 // M -> X
 func ldx(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Load Y with memory
 // M -> Y
 func ldy(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func lsr(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func nop(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Or Memory with Acumulator
 // A OR M -> A
 func ora(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func pha(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func php(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func pla(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func plp(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func rol(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func ror(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func rti(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 func rts(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Substract memory from accumulator with Borrow
 //  A - M - C -> A
 func sbc(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Set Carry flag
 // 1 -> C
 func sec(c *CPU, operand addressMode) opcode {
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.set(carry)
+	}
 }
 
 // Set Decimal flag
 // 1 -> D
 func sed(c *CPU, operand addressMode) opcode {
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.set(decimal)
+	}
 }
 
 // Set interrupt disable
 // 1 -> I
 func sei(c *CPU, operand addressMode) opcode {
-	return func() {}
+	return func() {
+		operand(c)
+		c.processorStatus.set(interruptDisable)
+	}
 }
 
 // Store Accumulator to Memory
 // A -> M
 func sta(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Store X to Memory
 // X -> M
 func stx(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
 // Store Y to Memory
 // Y -> M
 func sty(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
@@ -344,6 +385,7 @@ func tax(c *CPU, operand addressMode) opcode {
 // Transfer Accumulator to Y
 // A -> Y
 func tay(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
