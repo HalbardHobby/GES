@@ -40,12 +40,24 @@ func bcc(c *CPU, operand addressMode) opcode {
 
 // branch on carry set
 func bcs(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bcs := func() {
+		val, _, _ := operand(c)
+		if c.processorStatus.has(carry) {
+			c.programCounter = val
+		}
+	}
+	return bcs
 }
 
 // branch on result zero
 func beq(c *CPU, operand addressMode) opcode {
-	return func() {}
+	beq := func() {
+		val, _, _ := operand(c)
+		if c.processorStatus.has(zero) {
+			c.programCounter = val
+		}
+	}
+	return beq
 }
 
 func bit(c *CPU, operand addressMode) opcode {
@@ -54,17 +66,35 @@ func bit(c *CPU, operand addressMode) opcode {
 
 // Branch on result minus
 func bmi(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bmi := func() {
+		val, _, _ := operand(c)
+		if c.processorStatus.has(negative) {
+			c.programCounter = val
+		}
+	}
+	return bmi
 }
 
 // Branch on result not zero
 func bne(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bne := func() {
+		val, _, _ := operand(c)
+		if !c.processorStatus.has(zero) {
+			c.programCounter = val
+		}
+	}
+	return bne
 }
 
 // Branch on result plus
 func bpl(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bpl := func() {
+		val, _, _ := operand(c)
+		if !c.processorStatus.has(negative) {
+			c.programCounter = val
+		}
+	}
+	return bpl
 }
 
 // Force Break
@@ -74,12 +104,24 @@ func brk(c *CPU, operand addressMode) opcode {
 
 // Branch on overflow clear
 func bvc(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bvc := func() {
+		val, _, _ := operand(c)
+		if !c.processorStatus.has(overflow) {
+			c.programCounter = val
+		}
+	}
+	return bvc
 }
 
 // Branch on overflow set
 func bvs(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bvs := func() {
+		val, _, _ := operand(c)
+		if c.processorStatus.has(overflow) {
+			c.programCounter = val
+		}
+	}
+	return bvs
 }
 
 // Clear carry flag

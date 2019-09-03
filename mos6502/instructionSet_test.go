@@ -107,22 +107,68 @@ func Test_bcc(t *testing.T) {
 
 func Test_bcs(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: carry},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: carry},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bcs(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if tt.cpu.processorStatus.has(carry) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bcs := bcs(tt.cpu, rel)
+			bcs()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bcs() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
 
 func Test_beq(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: zero},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: zero},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			beq(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if tt.cpu.processorStatus.has(zero) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			beq := beq(tt.cpu, rel)
+			beq()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("beq() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
@@ -140,33 +186,102 @@ func Test_bit(t *testing.T) {
 
 func Test_bmi(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: negative},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: negative},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bmi(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if tt.cpu.processorStatus.has(negative) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bmi := bmi(tt.cpu, rel)
+			bmi()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bmi() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
 
 func Test_bne(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: zero},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bne(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if !tt.cpu.processorStatus.has(zero) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bne := bne(tt.cpu, rel)
+			bne()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bmi() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
 
 func Test_bpl(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: negative},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bpl(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if !tt.cpu.processorStatus.has(negative) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bpl := bpl(tt.cpu, rel)
+			bpl()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bpl() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
@@ -184,22 +299,68 @@ func Test_brk(t *testing.T) {
 
 func Test_bvc(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: overflow},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bvc(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if !tt.cpu.processorStatus.has(overflow) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bvc := bvc(tt.cpu, rel)
+			bvc()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bvc() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
 
 func Test_bvs(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:       &CPU{programCounter: 0x8000, processorStatus: overflow},
+			testValue: 0x20},
+		{name: "standard",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x20},
+		{name: "negative",
+			cpu:       &CPU{programCounter: 0x8000},
+			testValue: 0x9F},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bvs(tt.cpu, imm)
+			expected := tt.cpu.programCounter + 1
+			tt.setupInstructionTest()
+			if tt.cpu.processorStatus.has(overflow) {
+				var movement = uint16(tt.testValue)
+				if tt.testValue&0x80 != 0 {
+					movement |= 0xFF00
+				}
+				expected += movement
+			}
+			tt.cpu.WriteBus(tt.cpu.programCounter, tt.testValue)
+			bvs := bvs(tt.cpu, rel)
+			bvs()
+
+			if tt.cpu.programCounter != expected {
+				t.Errorf("bvs() = 0x%X, wanted 0x%X", tt.cpu.programCounter, expected)
+			}
 		})
 	}
 }
