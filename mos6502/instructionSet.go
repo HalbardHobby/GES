@@ -239,22 +239,40 @@ func jsr(c *CPU, operand addressMode) opcode {
 // Load Accumulator with Memory
 // M -> A
 func lda(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	lda := func() {
+		address, _, _ := operand(c)
+		c.accumulator = c.ReadBus(address)
+
+		c.processorStatus.setValue(negative, c.accumulator&0x80 != 0x00)
+		c.processorStatus.setValue(zero, c.accumulator == 0)
+	}
+	return lda
 }
 
 // Load X with Memory
 // M -> X
 func ldx(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	ldx := func() {
+		address, _, _ := operand(c)
+		c.indexX = c.ReadBus(address)
+
+		c.processorStatus.setValue(negative, c.indexX&0x80 != 0x00)
+		c.processorStatus.setValue(zero, c.indexX == 0)
+	}
+	return ldx
 }
 
 // Load Y with memory
 // M -> Y
 func ldy(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	ldy := func() {
+		address, _, _ := operand(c)
+		c.indexY = c.ReadBus(address)
+
+		c.processorStatus.setValue(negative, c.indexY&0x80 != 0x00)
+		c.processorStatus.setValue(zero, c.indexY == 0)
+	}
+	return ldy
 }
 
 func lsr(c *CPU, operand addressMode) opcode {
@@ -351,42 +369,51 @@ func sei(c *CPU, operand addressMode) opcode {
 // Store Accumulator to Memory
 // A -> M
 func sta(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	sta := func() {
+		address, _, _ := operand(c)
+		c.WriteBus(address, c.accumulator)
+	}
+	return sta
 }
 
 // Store X to Memory
 // X -> M
 func stx(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	stx := func() {
+		address, _, _ := operand(c)
+		c.WriteBus(address, c.indexX)
+	}
+	return stx
 }
 
 // Store Y to Memory
 // Y -> M
 func sty(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	sty := func() {
+		address, _, _ := operand(c)
+		c.WriteBus(address, c.indexY)
+	}
+	return sty
 }
 
 // Transfer Accumulator to X
 // A -> X
 func tax(c *CPU, operand addressMode) opcode {
-	c.indexX = c.accumulator
-	if c.indexX == 0x00 {
-		c.processorStatus.set(zero)
+	return func() {
+		c.indexX = c.accumulator
+		c.processorStatus.setValue(zero, c.indexX == 0x00)
+		c.processorStatus.setValue(negative, c.indexX&0x80 == 0x80)
 	}
-	if c.indexX&0x80 == 0x80 {
-		c.processorStatus.set(negative)
-	}
-	return func() {}
 }
 
 // Transfer Accumulator to Y
 // A -> Y
 func tay(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	return func() {
+		c.indexY = c.accumulator
+		c.processorStatus.setValue(zero, c.indexY == 0x00)
+		c.processorStatus.setValue(negative, c.indexY&0x80 != 0x00)
+	}
 }
 
 func tsx(c *CPU, operand addressMode) opcode {
@@ -400,12 +427,8 @@ func txa(c *CPU, operand addressMode) opcode {
 	return func() {
 		operand(c)
 		c.accumulator = c.indexX
-		if c.accumulator&0x80 != 0 {
-			c.processorStatus.set(negative)
-		}
-		if c.accumulator == 0 {
-			c.processorStatus.set(zero)
-		}
+		c.processorStatus.setValue(negative, c.accumulator&0x80 != 0)
+		c.processorStatus.setValue(zero, c.accumulator == 0)
 	}
 }
 
@@ -421,11 +444,7 @@ func tya(c *CPU, operand addressMode) opcode {
 	return func() {
 		operand(c)
 		c.accumulator = c.indexY
-		if c.accumulator&0x80 != 0 {
-			c.processorStatus.set(negative)
-		}
-		if c.accumulator == 0 {
-			c.processorStatus.set(zero)
-		}
+		c.processorStatus.setValue(negative, c.accumulator&0x80 != 0)
+		c.processorStatus.setValue(zero, c.accumulator == 0)
 	}
 }

@@ -9,6 +9,7 @@ type instructionTest struct {
 	cpu       *CPU
 	flags     flagSet
 	testValue uint8
+	address   uint16
 }
 
 var _testAddr uint16
@@ -17,7 +18,11 @@ func (tt *instructionTest) setupInstructionTest() {
 	read, write := getTestMemory()
 	tt.cpu.ReadBus = read
 	tt.cpu.WriteBus = write
-	return
+
+	tt.cpu.WriteBus(tt.cpu.programCounter, uint8(tt.address))
+	tt.cpu.WriteBus(tt.cpu.programCounter+1, uint8(tt.address>>8))
+
+	tt.cpu.WriteBus(tt.address, tt.testValue)
 }
 
 func Test_adc(t *testing.T) {
@@ -567,33 +572,84 @@ func Test_jsr(t *testing.T) {
 
 func Test_lda(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x05},
+		{name: "negative",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0xAA, flags: negative},
+		{name: "zero",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x00, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			lda(tt.cpu, imm)
+			tt.setupInstructionTest()
+			lda := lda(tt.cpu, abs)
+			lda()
+
+			if tt.cpu.accumulator != tt.testValue {
+				t.Errorf("Accumulator did not load data from memory")
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
 func Test_ldx(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x05},
+		{name: "negative",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0xAA, flags: negative},
+		{name: "zero",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x00, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ldx(tt.cpu, imm)
+			tt.setupInstructionTest()
+			ldx := ldx(tt.cpu, abs)
+			ldx()
+
+			if tt.cpu.indexX != tt.testValue {
+				t.Errorf("X register did not load data")
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
 func Test_ldy(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x05},
+		{name: "negative",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0xAA, flags: negative},
+		{name: "zero",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x00, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ldy(tt.cpu, imm)
+			tt.setupInstructionTest()
+			ldy := ldy(tt.cpu, abs)
+			ldy()
+
+			if tt.cpu.indexY != tt.testValue {
+				t.Errorf("Y register did not load data")
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
@@ -777,33 +833,60 @@ func Test_sei(t *testing.T) {
 
 func Test_sta(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:     &CPU{indexX: 0xAA},
+			address: 0x00DE},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sta(tt.cpu, imm)
+			tt.setupInstructionTest()
+			sta := sta(tt.cpu, zpg)
+			sta()
+
+			if tt.cpu.ReadBus(tt.address) != tt.cpu.accumulator {
+				t.Errorf("0x%X address != 0x%X, got 0x%X",
+					tt.address, tt.cpu.accumulator, tt.cpu.ReadBus(tt.address))
+			}
 		})
 	}
 }
 
 func Test_stx(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:     &CPU{indexX: 0xAA},
+			address: 0x00DE},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			stx(tt.cpu, imm)
+			tt.setupInstructionTest()
+			stx := stx(tt.cpu, zpg)
+			stx()
+
+			if tt.cpu.ReadBus(tt.address) != tt.cpu.indexX {
+				t.Errorf("0x%X address != 0x%X, got 0x%X",
+					tt.address, tt.cpu.indexX, tt.cpu.ReadBus(tt.address))
+			}
 		})
 	}
 }
 
 func Test_sty(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:     &CPU{indexY: 0xAA},
+			address: 0x00DE},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sty(tt.cpu, zpg)
+			tt.setupInstructionTest()
+			sty := sty(tt.cpu, zpg)
+			sty()
+
+			if tt.cpu.ReadBus(tt.address) != tt.cpu.indexY {
+				t.Errorf("0x%X address != 0x%X, got 0x%X",
+					tt.address, tt.cpu.indexY, tt.cpu.ReadBus(tt.address))
+			}
 		})
 	}
 }
@@ -838,11 +921,27 @@ func Test_tax(t *testing.T) {
 
 func Test_tay(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu:   &CPU{accumulator: 0x41},
+			flags: 0},
+		{name: "negative",
+			cpu:   &CPU{accumulator: 0x8F},
+			flags: negative},
+		{name: "zero",
+			cpu:   &CPU{accumulator: 0x00},
+			flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tay(tt.cpu, imm)
+			tay := tay(tt.cpu, imm)
+			tay()
+
+			if tt.cpu.accumulator != tt.cpu.indexY {
+				t.Errorf("tay() = 0x%X wanted 0x%X", tt.cpu.indexY, tt.cpu.accumulator)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b", tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
