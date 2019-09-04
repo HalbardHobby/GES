@@ -226,22 +226,41 @@ func eor(c *CPU, operand addressMode) opcode {
 // Increment Memory by one
 // M + 1 -> M
 func inc(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	inc := func() {
+		address, _, _ := operand(c)
+		value := c.ReadBus(address) + 1
+		c.WriteBus(address, value)
+
+		c.processorStatus.setValue(negative, value&0x80 != 0)
+		c.processorStatus.setValue(zero, value == 0)
+	}
+	return inc
 }
 
 // Increment X by one
 // X + 1 -> X
 func inx(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	inx := func() {
+		operand(c)
+		c.indexX++
+
+		c.processorStatus.setValue(negative, c.indexX&0x80 != 0)
+		c.processorStatus.setValue(zero, c.indexX == 0)
+	}
+	return inx
 }
 
 // Increment Y by One
 // Y + 1 -> Y
 func iny(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	iny := func() {
+		operand(c)
+		c.indexY++
+
+		c.processorStatus.setValue(negative, c.indexY&0x80 != 0)
+		c.processorStatus.setValue(zero, c.indexY == 0)
+	}
+	return iny
 }
 
 // Jump to new location

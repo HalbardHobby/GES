@@ -506,7 +506,7 @@ func Test_dex(t *testing.T) {
 		{name: "base",
 			cpu: &CPU{indexX: 0x05}},
 		{name: "negative",
-			cpu: &CPU{indexX: 0x000}, flags: negative},
+			cpu: &CPU{indexX: 0x00}, flags: negative},
 		{name: "zero",
 			cpu: &CPU{indexX: 0x01}, flags: zero},
 	}
@@ -570,33 +570,86 @@ func Test_eor(t *testing.T) {
 
 func Test_inc(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x05},
+		{name: "negative",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x7F, flags: negative},
+		{name: "zero",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0xFF, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			inc(tt.cpu, imm)
+			tt.setupInstructionTest()
+			inc := inc(tt.cpu, abs)
+			inc()
+
+			if tt.cpu.ReadBus(tt.address) != tt.testValue+1 {
+				t.Errorf("Address 0x%X is not 0x%X, got 0x%X",
+					tt.address, tt.testValue+1, tt.cpu.ReadBus(tt.address))
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
 func Test_inx(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{indexX: 0x05}},
+		{name: "negative",
+			cpu: &CPU{indexX: 0x7F}, flags: negative},
+		{name: "zero",
+			cpu: &CPU{indexX: 0xFF}, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			inx(tt.cpu, imm)
+			tt.setupInstructionTest()
+			expected := tt.cpu.indexX + 1
+			inx := inx(tt.cpu, impl)
+			inx()
+
+			if tt.cpu.indexX != expected {
+				t.Errorf("Index X is not 0x%X, got 0x%X",
+					expected, tt.cpu.indexX)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
 func Test_iny(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{indexY: 0x05}},
+		{name: "negative",
+			cpu: &CPU{indexY: 0x7F}, flags: negative},
+		{name: "zero",
+			cpu: &CPU{indexY: 0xFF}, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			iny(tt.cpu, imm)
+			tt.setupInstructionTest()
+			expected := tt.cpu.indexY + 1
+			iny := iny(tt.cpu, impl)
+			iny()
+
+			if tt.cpu.indexY != expected {
+				t.Errorf("Index Y is not 0x%X, got 0x%X",
+					expected, tt.cpu.indexY)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
