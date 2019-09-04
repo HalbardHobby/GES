@@ -473,33 +473,86 @@ func Test_cpy(t *testing.T) {
 
 func Test_dec(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x05},
+		{name: "negative",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x00, flags: negative},
+		{name: "zero",
+			cpu: &CPU{}, address: 0xAFDE,
+			testValue: 0x01, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dec(tt.cpu, imm)
+			tt.setupInstructionTest()
+			dec := dec(tt.cpu, abs)
+			dec()
+
+			if tt.cpu.ReadBus(tt.address) != tt.testValue-1 {
+				t.Errorf("Address 0x%X is not 0x%X, got 0x%X",
+					tt.address, tt.testValue-1, tt.cpu.ReadBus(tt.address))
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
 func Test_dex(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{indexX: 0x05}},
+		{name: "negative",
+			cpu: &CPU{indexX: 0x000}, flags: negative},
+		{name: "zero",
+			cpu: &CPU{indexX: 0x01}, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dex(tt.cpu, imm)
+			tt.setupInstructionTest()
+			expected := tt.cpu.indexX - 1
+			dex := dex(tt.cpu, impl)
+			dex()
+
+			if tt.cpu.indexX != expected {
+				t.Errorf("Index X is not 0x%X, got 0x%X",
+					expected, tt.cpu.indexX)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
 
 func Test_dey(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{indexY: 0x05}},
+		{name: "negative",
+			cpu: &CPU{indexY: 0x00}, flags: negative},
+		{name: "zero",
+			cpu: &CPU{indexY: 0x01}, flags: zero},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dey(tt.cpu, imm)
+			tt.setupInstructionTest()
+			expected := tt.cpu.indexY - 1
+			dey := dey(tt.cpu, impl)
+			dey()
+
+			if tt.cpu.indexY != expected {
+				t.Errorf("Index Y is not 0x%X, got 0x%X",
+					expected, tt.cpu.indexY)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }

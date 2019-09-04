@@ -179,22 +179,41 @@ func cpy(c *CPU, operand addressMode) opcode {
 // Decrement memory by one
 // M - 1 -> M
 func dec(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	dec := func() {
+		address, _, _ := operand(c)
+		value := c.ReadBus(address) - 1
+		c.WriteBus(address, value)
+
+		c.processorStatus.setValue(negative, value&0x80 != 0)
+		c.processorStatus.setValue(zero, value == 0)
+	}
+	return dec
 }
 
 // Decrement X by One
 // X - 1-> X
 func dex(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	dex := func() {
+		operand(c)
+		c.indexX--
+
+		c.processorStatus.setValue(negative, c.indexX&0x80 != 0)
+		c.processorStatus.setValue(zero, c.indexX == 0)
+	}
+	return dex
 }
 
 // Decrement Y by One
 // Y - 1 -> Y
 func dey(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	dey := func() {
+		operand(c)
+		c.indexY--
+
+		c.processorStatus.setValue(negative, c.indexY&0x80 != 0)
+		c.processorStatus.setValue(zero, c.indexY == 0)
+	}
+	return dey
 }
 
 // Exclusive-Or Memory with accumulator
