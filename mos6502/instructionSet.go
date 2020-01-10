@@ -24,9 +24,29 @@ func and(c *CPU, operand addressMode) opcode {
 	return and
 }
 
+// Arithmethic left shift (Memory & Accumulator)
+// c <- [] <- 0
 func asl(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	asl := func() {
+		address, implied, _ := operand(c)
+
+		val := uint16(c.accumulator)
+		if !implied {
+			val = uint16(c.ReadBus(address))
+		}
+
+		val = val << 1
+		c.processorStatus.setValue(negative, val&0x80 != 0)
+		c.processorStatus.setValue(carry, val&0xFF00 != 0)
+		c.processorStatus.setValue(zero, val&0x00FF == 0)
+
+		if implied {
+			c.accumulator = uint8(val)
+		} else {
+			c.WriteBus(address, uint8(val))
+		}
+	}
+	return asl
 }
 
 // Branch on carry clear
@@ -63,7 +83,15 @@ func beq(c *CPU, operand addressMode) opcode {
 }
 
 func bit(c *CPU, operand addressMode) opcode {
-	return func() {}
+	bit := func() {
+		address, _, _ := operand(c)
+		val := c.ReadBus(address)
+
+		c.processorStatus.setValue(zero, val&c.accumulator == 0x00)
+		c.processorStatus.setValue(overflow, val&(1<<6) != 0x00)
+		c.processorStatus.setValue(negative, val&(1<<7) != 0x00)
+	}
+	return bit
 }
 
 // Branch on result minus
@@ -101,6 +129,7 @@ func bpl(c *CPU, operand addressMode) opcode {
 
 // Force Break
 func brk(c *CPU, operand addressMode) opcode {
+	// TODO
 	return func() {}
 }
 
@@ -160,8 +189,15 @@ func clv(c *CPU, operand addressMode) opcode {
 
 // Compare Memory with Accumulator
 func cmp(c *CPU, operand addressMode) opcode {
-	// TODO
-	return func() {}
+	cmp := func() {
+		address, _, _ := operand(c)
+		val := c.ReadBus(address)
+		temp := c.accumulator - val
+		c.processorStatus.setValue(carry, c.accumulator >= val)
+		c.processorStatus.setValue(zero, temp == 0x00)
+		c.processorStatus.setValue(negative, temp&0x80 != 0x00)
+	}
+	return cmp
 }
 
 // Compare Memory with Index X

@@ -5,11 +5,12 @@ import (
 )
 
 type instructionTest struct {
-	name      string
-	cpu       *CPU
-	flags     flagSet
-	testValue uint8
-	address   uint16
+	name       string
+	cpu        *CPU
+	flags      flagSet
+	testValue  uint8
+	address    uint16
+	addressing addressMode
 }
 
 var _testAddr uint16
@@ -67,11 +68,59 @@ func Test_and(t *testing.T) {
 
 func Test_asl(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base acc",
+			cpu:        &CPU{accumulator: 0x02},
+			addressing: acc},
+		{name: "negative acc",
+			cpu:        &CPU{accumulator: 0x5A},
+			addressing: acc, flags: negative},
+		{name: "zero acc",
+			cpu:        &CPU{accumulator: 0x0},
+			addressing: acc, flags: zero},
+		{name: "carry acc",
+			cpu:        &CPU{accumulator: 0xAA},
+			addressing: acc, flags: carry},
+		{name: "base mem",
+			cpu:        &CPU{},
+			addressing: abs,
+			address:    0xAF9D, testValue: 0x02},
+		{name: "negative mem",
+			cpu:        &CPU{},
+			addressing: abs, flags: negative,
+			address: 0xAF9D, testValue: 0x5A},
+		{name: "zero mem",
+			cpu:        &CPU{},
+			addressing: abs, flags: zero,
+			address: 0xAF9D, testValue: 0x00},
+		{name: "carry mem",
+			cpu:        &CPU{},
+			addressing: abs, flags: carry,
+			address: 0xAF9D, testValue: 0xAA},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			asl(tt.cpu, imm)
+			tt.setupInstructionTest()
+			expected := tt.cpu.accumulator << 1
+			if tt.testValue != 0 {
+				expected = tt.testValue << 1
+			}
+			asl := asl(tt.cpu, tt.addressing)
+			asl()
+
+			var answer uint8
+			if _, impl, _ := tt.addressing(tt.cpu); impl {
+				answer = tt.cpu.accumulator
+			} else {
+				answer = tt.cpu.ReadBus(tt.address)
+			}
+
+			if answer != expected {
+				t.Errorf("asl() got 0x%X, wanted 0x%X", answer, expected)
+			}
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
@@ -180,11 +229,26 @@ func Test_beq(t *testing.T) {
 
 func Test_bit(t *testing.T) {
 	tests := []instructionTest{
-		// TODO: Add test cases.
+		{name: "base",
+			cpu: &CPU{}, flags: zero,
+			testValue: 0x20, address: 0xAFED},
+		{name: "base",
+			cpu: &CPU{accumulator: 0x40}, flags: overflow,
+			testValue: 0x40, address: 0xAFED},
+		{name: "base",
+			cpu: &CPU{accumulator: 0x80}, flags: negative,
+			testValue: 0x80, address: 0xAFED},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			bit(tt.cpu, imm)
+			tt.setupInstructionTest()
+			bit := bit(tt.cpu, abs)
+			bit()
+
+			if tt.cpu.processorStatus != tt.flags {
+				t.Errorf("processor status = %b, wanted %b",
+					tt.cpu.processorStatus, tt.flags)
+			}
 		})
 	}
 }
@@ -441,6 +505,9 @@ func Test_clv(t *testing.T) {
 func Test_cmp(t *testing.T) {
 	tests := []instructionTest{
 		// TODO: Add test cases.
+		{name: "carry", },
+		{name: "zero", },
+		{name: "negative", },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
