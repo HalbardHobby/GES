@@ -27,7 +27,7 @@ func (tt *addressTest) setupAddressTest() (expectedCounter uint16) {
 // This function creates a sample memory array with its read
 // and write buses for testing purposes.
 func getTestMemory() (read readBus, write writeBus) {
-	mem := make([]byte, 0xFFFF)
+	mem := make(memory, 0xFFFF)
 	read = func(adr uint16) uint8 {
 		return mem[adr]
 	}

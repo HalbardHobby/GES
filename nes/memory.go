@@ -21,7 +21,7 @@ const (
 	endOfMemory            = 0xFFFF
 )
 
-type memory struct {
+type Memory struct {
 	internalRAM    [internalRAMSize]byte    // Internal 2KB RAM
 	ppuRegisters   [ppuRegisterSize]byte    // PPU Registers
 	apuIORegisters [apuIORegisterSize]byte  // APU & I/O registers
@@ -29,7 +29,7 @@ type memory struct {
 	cartridgeSpace [cartridgeSpaceSize]byte // cartridge space
 }
 
-func (m memory) read(address uint16) byte {
+func (m *Memory) Read(address uint16) byte {
 	switch {
 	case address >= internalMemoryStart && address < mirrorMemoryStart:
 		// 2KB internal RAM
@@ -52,7 +52,7 @@ func (m memory) read(address uint16) byte {
 	return 0
 }
 
-func (m memory) write(address uint16, value uint8) {
+func (m *Memory) Write(address uint16, value uint8) {
 	switch {
 	case address >= internalMemoryStart && address < mirrorMemoryStart:
 		// 2KB internal RAM
