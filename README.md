@@ -1,5 +1,7 @@
 # GES: Gotendo Entertainment System
- [![Build Status](https://travis-ci.com/HalbardHobby/GES.svg?branch=master)](https://travis-ci.com/HalbardHobby/GES)
+[![GoDoc](https://godoc.org/github.com/HalbardHobby/GES?status.svg)](https://godoc.org/github.com/HalbardHobby/GES)
+[![Build Status](https://travis-ci.com/HalbardHobby/GES.svg?branch=master)](https://travis-ci.com/HalbardHobby/GES)
+[![Go Report Card](https://goreportcard.com/badge/github.com/halbardhobby/GES)](https://goreportcard.com/report/github.com/halbardhobby/GES)
 
 NES Emulaator built with Go with the objective of learning the language and use TDD.
 
